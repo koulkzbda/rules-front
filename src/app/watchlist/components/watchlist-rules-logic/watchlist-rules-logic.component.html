@@ -1,0 +1,26 @@
+<form class="row">
+  <div class="col">
+    <div class="row">
+      <div class="col-12 col-sm-5">
+        <mat-form-field appearance="fill">
+          <mat-label>Watchlist name</mat-label>
+          <input matInput [(ngModel)]="watchlist.label" name="label">
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 col-sm-6">
+        <p>Drag rules to set And/Or functionality</p>
+      </div>
+      <div class="col-12 col-sm-6">
+        <p>Satisfy</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <button mat-raised-button color="accent">Edit rules</button>
+        <button mat-raised-button color="primary">Save</button>
+      </div>
+    </div>
+  </div>
+</form>
