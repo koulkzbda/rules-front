@@ -52,9 +52,9 @@ $mat-otc-teal: (
       200: $dark-primary-text,
       300: $dark-primary-text,
       400: $dark-primary-text,
-      500: $dark-primary-text,
-      600: $dark-primary-text,
-      700: $dark-primary-text,
+      500: $light-primary-text,
+      600: $light-primary-text,
+      700: $light-primary-text,
       800: $light-primary-text,
       900: $light-primary-text,
       A100: $dark-primary-text,
@@ -97,4 +97,39 @@ $mat-otc-amber: (
     )
 );
 
+$mat-darkgray: (
+    50 : #f5f5f5,
+    100 : #e5e5e5,
+    200 : #d4d4d4,
+    300 : #c3c3c3,
+    400 : #b6b6b6,
+    500 : #a9a9a9,
+    600 : #a2a2a2,
+    700 : #989898,
+    800 : #8f8f8f,
+    900 : #7e7e7e,
+    A100 : #ffffff,
+    A200 : #fbdcdc,
+    A400 : #ffa5a5,
+    A700 : #ff8b8b,
+    contrast: (
+      50: $dark-primary-text,
+      100: $dark-primary-text,
+      200: $dark-primary-text,
+      300: $dark-primary-text,
+      400: $dark-primary-text,
+      500: $light-primary-text,
+      600: $light-primary-text,
+      700: $light-primary-text,
+      800: $light-primary-text,
+      900: $light-primary-text,
+      A100: $dark-primary-text,
+      A200: $dark-primary-text,
+      A400: $dark-primary-text,
+      A700: $dark-primary-text,
+    )
+);
+
 $default-theme: mat-light-theme(mat-palette($mat-otc-cyan), mat-palette($mat-otc-teal), mat-palette($mat-otc-amber, 200, 50, 500));
+
+$grey-theme: mat-light-theme(mat-palette($mat-otc-cyan), mat-palette($mat-darkgray, 500, 300, 700), mat-palette($mat-otc-amber, 200, 50, 500));

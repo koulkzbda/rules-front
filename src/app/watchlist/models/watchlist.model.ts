@@ -11,11 +11,16 @@ export class Watchlist {
 }
 
 export class LogicalContainer {
+  static nbOfInstances = 0;
+  public currentInstance: number;
   constructor(
     public type?: string,
     public rules?: Rule[],
     public containers?: LogicalContainer[]
-  ) { }
+  ) {
+    LogicalContainer.nbOfInstances += 1;
+    this.currentInstance = LogicalContainer.nbOfInstances;
+  }
 }
 
 export class Rule {

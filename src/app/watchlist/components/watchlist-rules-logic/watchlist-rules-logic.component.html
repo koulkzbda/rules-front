@@ -9,18 +9,68 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-12 col-sm-6">
+      <div class="col-12 col-md-6">
         <p>Drag rules to set And/Or functionality</p>
+        <div class="d-flex flex-column justify-content-center h-100">
+          <ul id="ruleSet" cdkDropList [cdkDropListData]="watchlist.ruleSet" (cdkDropListDropped)="drop($event)"
+            #ruleSet="cdkDropList" [cdkDropListConnectedTo]="listContainerRules">
+            <li *ngFor="let rule of watchlist.ruleSet" cdkDrag>{{rule.field}}</li>
+          </ul>
+        </div>
       </div>
-      <div class="col-12 col-sm-6">
+      <div class="col-12 col-md-6">
         <p>Satisfy</p>
+        <div>
+          <ng-container *ngTemplateOutlet="recursiveContainerTmpl; context: { container: watchlist.mainContainer }">
+          </ng-container>
+        </div>
       </div>
     </div>
     <div class="row">
-      <div class="col">
+      <div class="col d-flex justify-content-around">
         <button mat-raised-button color="accent">Edit rules</button>
         <button mat-raised-button color="primary">Save</button>
       </div>
     </div>
   </div>
 </form>
+
+<ng-template #recursiveContainerTmpl let-container="container">
+  <div class="border rounded mb-3 mx-3">
+    <div class="d-flex justify-content-between">
+      <mat-form-field appearance="fill">
+        <mat-select name="containerType" [(ngModel)]="container.type">
+          <mat-option value="AND">AND</mat-option>
+          <mat-option value="OR">OR</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <span class="material-icons ml-auto d-block p-2">delete</span>
+    </div>
+    <div>
+      <ul id="containerRules-{{container.currentInstance}}" cdkDropList [cdkDropListData]="container.rules"
+        (cdkDropListDropped)="drop($event)" [cdkDropListConnectedTo]="getListContainerConnected(container)">
+        <li *ngFor="let rule of container.rules" cdkDrag>
+          {{rule.field}}
+        </li>
+      </ul>
+      <ng-container *ngIf="container?.containers?.length > 0">
+        <div *ngFor="let containerChild of container?.containers">
+          <ng-container *ngTemplateOutlet="recursiveContainerTmpl; context: { container: containerChild}">
+          </ng-container>
+        </div>
+      </ng-container>
+      <div class="d-flex">
+        <span class="material-icons ml-auto d-block p-2">add</span>
+      </div>
+    </div>
+    <div class="grey-variant">
+      <button class="w-100" mat-raised-button color="accent">NEST WITHIN A NEW SET OF RULES</button>
+    </div>
+  </div>
+</ng-template>
+
+<div>
+  <pre>
+    {{watchlist | json}}
+  </pre>
+</div>

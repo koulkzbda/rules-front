@@ -1,2 +1,6 @@
 @include angular-material-theme($default-theme);
 
+.grey-variant {
+  @include angular-material-theme($grey-theme);
+}
+
