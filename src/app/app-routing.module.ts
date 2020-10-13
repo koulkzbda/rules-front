@@ -6,7 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 const routes: Routes = [
   { path: 'watchlist', component: WatchlistRulesTableComponent },
   { path: 'watchlist/save', component: WatchlistRulesLogicComponent },
-  { path: '', redirectTo: '/watchlist', pathMatch: 'full' }
+  { path: '', redirectTo: '/watchlist/save', pathMatch: 'full' }
 ];
 
 @NgModule({
