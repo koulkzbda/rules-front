@@ -10,12 +10,14 @@
     </div>
     <div class="row">
       <div class="col-12 col-md-6">
-        <p>Drag rules to set And/Or functionality</p>
+        <p class="mat-text-primary">Drag rules to set And/Or functionality</p>
         <div class="d-flex flex-column justify-content-center h-100">
-          <ul id="ruleSet" cdkDropList [cdkDropListData]="watchlist.ruleSet" (cdkDropListDropped)="drop($event)"
-            #ruleSet="cdkDropList" [cdkDropListConnectedTo]="listContainerRules">
-            <li *ngFor="let rule of watchlist.ruleSet" cdkDrag>{{rule.field}}</li>
-          </ul>
+          <mat-selection-list [multiple]="false" id="ruleSet" cdkDropList [cdkDropListData]="watchlist.ruleSet"
+            (cdkDropListDropped)="drop($event)" #ruleSet="cdkDropList" [cdkDropListConnectedTo]="listContainerRules">
+            <mat-list-option *ngFor="let rule of watchlist.ruleSet" cdkDrag>
+              {{rule.field}} {{rule.condition}} {{rule.input}}
+            </mat-list-option>
+          </mat-selection-list>
         </div>
       </div>
       <div class="col-12 col-md-6">
@@ -49,12 +51,16 @@
       </button>
     </div>
     <div>
-      <ul id="containerRules-{{container.currentInstance}}" cdkDropList [cdkDropListData]="container.rules"
-        (cdkDropListDropped)="drop($event)" [cdkDropListConnectedTo]="getListContainerConnected(container)">
-        <li *ngFor="let rule of container.rules" cdkDrag>
-          {{rule.field}}
-        </li>
-      </ul>
+      <mat-selection-list id="containerRules-{{container.currentInstance}}" cdkDropList
+        [cdkDropListData]="container.rules" (cdkDropListDropped)="drop($event)"
+        [cdkDropListConnectedTo]="getListContainerConnected(container)" [multiple]="false">
+        <p *ngIf="container.rules.length <= 0" class="ml-3 text-muted">
+          Drop rules here...
+        </p>
+        <mat-list-option *ngFor="let rule of container.rules" cdkDrag>
+          {{rule.field}} {{rule.condition}} {{rule.input}}
+        </mat-list-option>
+      </mat-selection-list>
       <ng-container *ngIf="container?.containers?.length > 0">
         <div *ngFor="let containerChild of container?.containers">
           <ng-container

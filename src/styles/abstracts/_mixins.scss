@@ -1,1 +1,7 @@
-
+@mixin utility-text-color {
+  @each $key, $value in (primary: $primary-color, accent: $accent-color, warn: $warn-color) {
+    .mat-text-#{$key} {
+      color: map-get($value, default) !important;
+    }
+  }
+}

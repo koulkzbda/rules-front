@@ -130,6 +130,10 @@ $mat-darkgray: (
     )
 );
 
-$default-theme: mat-light-theme(mat-palette($mat-otc-cyan), mat-palette($mat-otc-teal), mat-palette($mat-otc-amber, 200, 50, 500));
+$primary-color: mat-palette($mat-otc-cyan);
+$accent-color: mat-palette($mat-otc-teal);
+$warn-color: mat-palette($mat-otc-amber, 200, 50, 500);
 
-$grey-theme: mat-light-theme(mat-palette($mat-otc-cyan), mat-palette($mat-darkgray, 500, 300, 700), mat-palette($mat-otc-amber, 200, 50, 500));
+$default-theme: mat-light-theme($primary-color, $accent-color, $warn-color);
+
+$grey-theme: mat-light-theme($primary-color, mat-palette($mat-darkgray, 500, 300, 700), $warn-color);
