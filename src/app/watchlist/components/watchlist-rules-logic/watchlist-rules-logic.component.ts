@@ -19,6 +19,15 @@ export class WatchlistRulesLogicComponent implements OnInit {
       .concat('ruleSet');
   }
 
+  addContainer(container: LogicalContainer): void {
+    container.containers.push(new LogicalContainer(container.getOppositeType()));
+  }
+
+  deleteContainer(parentContainer: LogicalContainer, childContainer: LogicalContainer): void {
+    parentContainer.containers = parentContainer.containers
+      .filter(container => JSON.stringify(container) !== JSON.stringify(childContainer));
+  }
+
   drop(event: CdkDragDrop<Rule[]>): void {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);

@@ -35,7 +35,7 @@
   </div>
 </form>
 
-<ng-template #recursiveContainerTmpl let-container="container">
+<ng-template #recursiveContainerTmpl let-container="container" let-parent="parent">
   <div class="border rounded mb-3 mx-3">
     <div class="d-flex justify-content-between">
       <mat-form-field appearance="fill">
@@ -44,7 +44,9 @@
           <mat-option value="OR">OR</mat-option>
         </mat-select>
       </mat-form-field>
-      <span class="material-icons ml-auto d-block p-2">delete</span>
+      <button *ngIf="parent != null" (click)="deleteContainer(parent, container)" mat-icon-button class="ml-auto">
+        <mat-icon>delete</mat-icon>
+      </button>
     </div>
     <div>
       <ul id="containerRules-{{container.currentInstance}}" cdkDropList [cdkDropListData]="container.rules"
@@ -55,12 +57,15 @@
       </ul>
       <ng-container *ngIf="container?.containers?.length > 0">
         <div *ngFor="let containerChild of container?.containers">
-          <ng-container *ngTemplateOutlet="recursiveContainerTmpl; context: { container: containerChild}">
+          <ng-container
+            *ngTemplateOutlet="recursiveContainerTmpl; context: { container: containerChild, parent: container}">
           </ng-container>
         </div>
       </ng-container>
       <div class="d-flex">
-        <span class="material-icons ml-auto d-block p-2">add</span>
+        <button (click)="addContainer(container)" mat-icon-button class="ml-auto">
+          <mat-icon>add</mat-icon>
+        </button>
       </div>
     </div>
   </div>

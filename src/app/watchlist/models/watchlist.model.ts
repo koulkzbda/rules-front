@@ -13,13 +13,23 @@ export class Watchlist {
 export class LogicalContainer {
   static nbOfInstances = 0;
   public currentInstance: number;
+  public type = 'AND';
+  public rules = [];
+  public containers = [];
   constructor(
-    public type?: string,
-    public rules?: Rule[],
-    public containers?: LogicalContainer[]
+    type?: string,
+    rules?: Rule[],
+    containers?: LogicalContainer[]
   ) {
     LogicalContainer.nbOfInstances += 1;
     this.currentInstance = LogicalContainer.nbOfInstances;
+    this.type = type == null ? 'AND' : type;
+    this.rules = rules == null ? [] : rules;
+    this.containers = containers == null ? [] : containers;
+  }
+
+  getOppositeType(): string {
+    return this.type === 'AND' ? 'OR' : 'AND';
   }
 }
 
