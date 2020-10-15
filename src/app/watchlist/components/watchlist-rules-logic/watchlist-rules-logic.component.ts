@@ -1,7 +1,9 @@
+import { SaveWatchlistDiaologueComponent } from './save-watchlist-diaologue/save-watchlist-diaologue.component';
 import { watchlist1 } from './../../mocks/watchlist.mock';
 import { Rule, Watchlist, LogicalContainer } from './../../models/watchlist.model';
 import { Component, OnInit } from '@angular/core';
-import { CdkDragDrop, copyArrayItem, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-watchlist-rules-logic',
@@ -9,10 +11,11 @@ import { CdkDragDrop, copyArrayItem, moveItemInArray, transferArrayItem } from '
   styleUrls: ['./watchlist-rules-logic.component.scss']
 })
 export class WatchlistRulesLogicComponent implements OnInit {
-  watchlist = watchlist1;
+  watchlist: Watchlist;
   initialRuleSet: Rule[];
   listContainerRules = [];
-  constructor() { }
+  watchlistNames: string[];
+  constructor(public dialog: MatDialog) { }
 
   getListContainerConnected(container: LogicalContainer): string[] {
     return this.listContainerRules
@@ -29,19 +32,23 @@ export class WatchlistRulesLogicComponent implements OnInit {
       .filter(container => JSON.stringify(container) !== JSON.stringify(childContainer));
   }
 
-  drop(event: CdkDragDrop<Rule[]>): void {
-    if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+  saveWatchlist(): void { }
+
+  saveOrOpenDialog(): void {
+    if (this.watchlistNames.indexOf(this.watchlist.label) !== -1) {
+      this.openDialog();
     } else {
-      transferArrayItem(event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex);
+      this.saveWatchlist();
     }
   }
 
-  resetRuleSet(): void {
-    this.watchlist.ruleSet = this.initialRuleSet.slice();
+  openDialog(): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = this.watchlist;
+    dialogConfig.maxWidth = 400;
+    const dialogRef = this.dialog.open(SaveWatchlistDiaologueComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe(result => { });
   }
 
   dropWithoutDuplicates(event: CdkDragDrop<Rule[]>): void {
@@ -57,10 +64,18 @@ export class WatchlistRulesLogicComponent implements OnInit {
     }
   }
 
+  resetRuleSet(): void {
+    this.watchlist.ruleSet = this.initialRuleSet.slice();
+  }
+
   ngOnInit(): void {
     for (let index = 1; index <= LogicalContainer.nbOfInstances; index++) {
       this.listContainerRules.push('containerRules-' + index);
     }
+    //this will have to be retreived from the backend API
+    this.watchlistNames = ['Watchlist 1'];
+    this.watchlist = watchlist1;
+
     this.initialRuleSet = this.watchlist.ruleSet.slice();
   }
 

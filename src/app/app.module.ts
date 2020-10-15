@@ -16,12 +16,15 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
+import { MatDialogModule } from '@angular/material/dialog';
+import { SaveWatchlistDiaologueComponent } from './watchlist/components/watchlist-rules-logic/save-watchlist-diaologue/save-watchlist-diaologue.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     WatchlistRulesTableComponent,
-    WatchlistRulesLogicComponent
+    WatchlistRulesLogicComponent,
+    SaveWatchlistDiaologueComponent
   ],
   imports: [
     BrowserModule,
@@ -37,6 +40,7 @@ import { MatListModule } from '@angular/material/list';
     MatIconModule,
     MatCardModule,
     MatListModule,
+    MatDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

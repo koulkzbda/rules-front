@@ -1,0 +1,13 @@
+<h2 mat-dialog-title>Watchlist already exists</h2>
+<mat-dialog-content class="mat-typography">
+  <h3>Do you want to overwrite defnitively {{data.label}} ?</h3>
+  <p>You are about to <strong>overwrite defnitively an existing watchlist</strong>, please click on Overwrite to update
+    the
+    existing
+    watchlist or on Cancel to define another name.</p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close class="color-grey text-white">Cancel</button>
+  <button (click)="saveWatchlist()" mat-button [mat-dialog-close]="true" cdkFocusInitial
+    color="primary">Overwrite</button>
+</mat-dialog-actions>
