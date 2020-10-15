@@ -12,15 +12,17 @@
       <div class="col-12 col-md-6">
         <p class="mat-text-primary">Drag rules to set And/Or functionality</p>
         <div class="d-flex flex-column justify-content-center h-100">
-          <mat-selection-list [multiple]="false" id="ruleSet" cdkDropList [cdkDropListData]="watchlist.ruleSet"
-            (cdkDropListDropped)="drop($event)" #ruleSet="cdkDropList" [cdkDropListConnectedTo]="listContainerRules">
+          <mat-selection-list [multiple]="false" id="ruleSet" cdkDropList cdkDropListSortingDisabled
+            [cdkDropListData]="watchlist.ruleSet" (cdkDropListDropped)="dropWithoutDuplicates($event)"
+            #ruleSet="cdkDropList" [cdkDropListConnectedTo]="listContainerRules"
+            class="border color-grey-transparent rounded mx-2">
             <mat-list-option *ngFor="let rule of watchlist.ruleSet" cdkDrag>
               {{rule.field}} {{rule.condition}} {{rule.input}}
             </mat-list-option>
           </mat-selection-list>
         </div>
       </div>
-      <div class="col-12 col-md-6">
+      <div class="col-12 col-md-6 mt-md-0 mt-5">
         <p>Satisfy</p>
         <div>
           <ng-container *ngTemplateOutlet="recursiveContainerTmpl; context: { container: watchlist.mainContainer }">
@@ -52,8 +54,9 @@
     </div>
     <div>
       <mat-selection-list id="containerRules-{{container.currentInstance}}" cdkDropList
-        [cdkDropListData]="container.rules" (cdkDropListDropped)="drop($event)"
-        [cdkDropListConnectedTo]="getListContainerConnected(container)" [multiple]="false">
+        [cdkDropListData]="container.rules" (cdkDropListDropped)="dropWithoutDuplicates($event)"
+        [cdkDropListConnectedTo]="getListContainerConnected(container)" [multiple]="false"
+        class="color-grey-transparent m-2 border rounded">
         <p *ngIf="container.rules.length <= 0" class="ml-3 text-muted">
           Drop rules here...
         </p>

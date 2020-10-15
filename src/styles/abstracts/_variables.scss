@@ -137,3 +137,5 @@ $warn-color: mat-palette($mat-otc-amber, 200, 50, 500);
 $default-theme: mat-light-theme($primary-color, $accent-color, $warn-color);
 
 $grey-theme: mat-light-theme($primary-color, mat-palette($mat-darkgray, 500, 300, 700), $warn-color);
+
+$grey-transparant-color: rgba(0, 0, 0, 0.02);

@@ -1,7 +1,7 @@
 import { watchlist1 } from './../../mocks/watchlist.mock';
 import { Rule, Watchlist, LogicalContainer } from './../../models/watchlist.model';
 import { Component, OnInit } from '@angular/core';
-import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, copyArrayItem, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-watchlist-rules-logic',
@@ -10,6 +10,7 @@ import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/dr
 })
 export class WatchlistRulesLogicComponent implements OnInit {
   watchlist = watchlist1;
+  initialRuleSet: Rule[];
   listContainerRules = [];
   constructor() { }
 
@@ -38,10 +39,29 @@ export class WatchlistRulesLogicComponent implements OnInit {
         event.currentIndex);
     }
   }
+
+  resetRuleSet(): void {
+    this.watchlist.ruleSet = this.initialRuleSet.slice();
+  }
+
+  dropWithoutDuplicates(event: CdkDragDrop<Rule[]>): void {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      transferArrayItem(event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex);
+      console.log('transfertArrayItem')
+      this.resetRuleSet();
+    }
+  }
+
   ngOnInit(): void {
     for (let index = 1; index <= LogicalContainer.nbOfInstances; index++) {
       this.listContainerRules.push('containerRules-' + index);
     }
+    this.initialRuleSet = this.watchlist.ruleSet.slice();
   }
 
 }
