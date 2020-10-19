@@ -1,3 +1,5 @@
+import { FieldType } from '../store/fieldGroup';
+
 export class Watchlist {
   constructor(
     public label?: string,
@@ -35,8 +37,15 @@ export class LogicalContainer {
 
 export class Rule {
   constructor(
-    public field?: string,
+    public fieldType?: FieldType,
     public condition?: string,
-    public input?: string
+    public input?: string[]
   ) { }
+
+  getInputAsString(): string {
+    if (this.input.length > 1) {
+      return this.input.join(', ');
+    }
+    return this.input[0];
+  }
 }

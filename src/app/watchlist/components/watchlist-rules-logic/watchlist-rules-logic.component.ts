@@ -13,8 +13,8 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 export class WatchlistRulesLogicComponent implements OnInit {
   watchlist: Watchlist;
   initialRuleSet: Rule[];
-  listContainerRules = [];
   watchlistNames: string[];
+  listContainerRules = [];
   constructor(public dialog: MatDialog) { }
 
   getListContainerConnected(container: LogicalContainer): string[] {
@@ -25,6 +25,7 @@ export class WatchlistRulesLogicComponent implements OnInit {
 
   addContainer(container: LogicalContainer): void {
     container.containers.push(new LogicalContainer(container.getOppositeType()));
+    this.listContainerRules.push('containerRules-' + LogicalContainer.nbOfInstances);
   }
 
   deleteContainer(parentContainer: LogicalContainer, childContainer: LogicalContainer): void {
@@ -59,7 +60,6 @@ export class WatchlistRulesLogicComponent implements OnInit {
         event.container.data,
         event.previousIndex,
         event.currentIndex);
-      console.log('transfertArrayItem')
       this.resetRuleSet();
     }
   }

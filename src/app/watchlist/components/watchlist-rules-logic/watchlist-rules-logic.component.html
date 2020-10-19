@@ -17,7 +17,7 @@
             #ruleSet="cdkDropList" [cdkDropListConnectedTo]="listContainerRules"
             class="border color-grey-transparent rounded mx-2">
             <mat-list-option *ngFor="let rule of watchlist.ruleSet" cdkDrag>
-              {{rule.field}} {{rule.condition}} {{rule.input}}
+              {{rule.fieldType.label}} {{rule.condition}} {{rule.getInputAsString()}}
             </mat-list-option>
           </mat-selection-list>
         </div>
@@ -61,7 +61,7 @@
           Drop rules here...
         </p>
         <mat-list-option *ngFor="let rule of container.rules" cdkDrag>
-          {{rule.field}} {{rule.condition}} {{rule.input}}
+          {{rule.fieldType.label}} {{rule.condition}} {{rule.getInputAsString()}}
         </mat-list-option>
       </mat-selection-list>
       <ng-container *ngIf="container?.containers?.length > 0">
