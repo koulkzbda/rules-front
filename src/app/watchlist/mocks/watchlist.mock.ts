@@ -1,4 +1,4 @@
-import { EnumerartionalFieldType, NumericalFieldType } from '../store/fieldGroup';
+import { EnumerartionalFieldType, NumericalFieldType } from './../models/fieldType.model';
 import { LogicalContainer, Rule, Watchlist } from './../models/watchlist.model';
 
 export let watchlist1 = new Watchlist(

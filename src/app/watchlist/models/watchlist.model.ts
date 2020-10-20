@@ -1,4 +1,4 @@
-import { FieldType } from '../store/fieldGroup';
+import { FieldType } from './fieldType.model';
 
 export class Watchlist {
   constructor(

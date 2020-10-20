@@ -1,9 +1,10 @@
-import { FieldType, FIELD_GROUP, NumericalFieldType } from './../../store/fieldGroup';
+import { FIELD_GROUP } from './../../mocks/fieldGroup.mock';
 import { watchlist1 } from './../../mocks/watchlist.mock';
 import { Component, OnInit } from '@angular/core';
 import { Rule, Watchlist } from '../../models/watchlist.model';
 import { MatTableDataSource } from '@angular/material/table';
 import { FormControl } from '@angular/forms';
+import { FieldType, NumericalFieldType } from '../../models/fieldType.model';
 
 @Component({
   selector: 'app-watchlist-rules-table',
