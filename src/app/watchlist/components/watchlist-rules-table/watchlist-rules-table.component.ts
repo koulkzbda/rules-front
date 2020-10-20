@@ -14,7 +14,7 @@ export class WatchlistRulesTableComponent implements OnInit {
   watchlist: Watchlist;
   initialRuleSet: Rule[];
   watchlistNames: string[];
-  displayedColumns = ['field', 'condition', 'input'];
+  displayedColumns = ['field', 'condition', 'input', 'actions'];
   dataSource: MatTableDataSource<Rule>;
   fieldGroup = FIELD_GROUP;
   fieldControl = new FormControl();
@@ -24,6 +24,11 @@ export class WatchlistRulesTableComponent implements OnInit {
   addNewRule(): void {
     this.dataSource.data.push(new Rule(new NumericalFieldType('ESG BMK Diff'), '<', ['0']));
     this.dataSource.filter = '';
+  }
+
+  deleteRule(index: number): void {
+    this.watchlist.ruleSet.splice(index, 1);
+    this.dataSource = new MatTableDataSource(this.watchlist.ruleSet);
   }
 
   compareByFieldLabel(fieldType1: FieldType, fieldType2: FieldType): boolean {

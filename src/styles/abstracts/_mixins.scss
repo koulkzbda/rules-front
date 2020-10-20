@@ -1,7 +1,18 @@
-@mixin utility-text-color {
+@mixin utility-mat-color {
   @each $key, $value in (primary: $primary-color, accent: $accent-color, warn: $warn-color) {
     .mat-text-#{$key} {
       color: map-get($value, default) !important;
+    }
+    .mat-color-#{$key} {
+      background-color: map-get($value, default) !important;
+    }
+  }
+}
+
+@mixin font-size {
+  @each $key, $value in (1: 2.5rem, 2: 2rem, 3: 1.75rem, 4: 1.5rem, 5: 1.25rem, 6: 1rem) {
+    .font-size-#{$key} {
+      font-size: $value;
     }
   }
 }
