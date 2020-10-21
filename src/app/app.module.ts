@@ -19,13 +19,15 @@ import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
+import { ComplianceRulesTableComponent } from './compliance/components/compliance-rules-table/compliance-rules-table.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     WatchlistRulesTableComponent,
     WatchlistRulesLogicComponent,
-    SaveWatchlistDiaologueComponent
+    SaveWatchlistDiaologueComponent,
+    ComplianceRulesTableComponent
   ],
   imports: [
     BrowserModule,
