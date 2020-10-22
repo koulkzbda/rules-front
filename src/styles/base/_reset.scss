@@ -9,4 +9,12 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   padding-top: 1.34375em !important;
 }
 
+.mat-form-field-max-width-sm {
+  max-width: 80px;
+}
+
+.mat-form-field-max-width-l {
+  max-width: 150px;
+}
+
 @include font-size;

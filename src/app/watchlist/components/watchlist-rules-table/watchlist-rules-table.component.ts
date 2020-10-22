@@ -3,7 +3,6 @@ import { watchlist1 } from './../../mocks/watchlist.mock';
 import { Component, OnInit } from '@angular/core';
 import { Rule, Watchlist } from '../../models/watchlist.model';
 import { MatTableDataSource } from '@angular/material/table';
-import { FormControl } from '@angular/forms';
 import { FieldType, NumericalFieldType } from '../../models/fieldType.model';
 
 @Component({
@@ -18,7 +17,6 @@ export class WatchlistRulesTableComponent implements OnInit {
   displayedColumns = ['field', 'condition', 'input', 'actions'];
   dataSource: MatTableDataSource<Rule>;
   fieldGroup = FIELD_GROUP;
-  fieldControl = new FormControl();
 
   constructor() { }
 

@@ -99,19 +99,25 @@ export let CustomGroup = new ComplianceRuleGroup(
   [watchlist1]
 );
 
-export let Compliance1 = new Compliance(
+export let compliance1 = new Compliance(
   'Compliance 1',
   'Combination of ESG and UCITS',
   new Date(2020, 9, 21, 19, 0, 0),
   [
-    new ComplianceRule(ESGGroup, ESGGroup.watchlists[0].mainContainer.rules[0], new NumericalFieldType('MV Weight'), '>', 'N/A', null, 5),
-    new ComplianceRule(ESGGroup, ESGGroup.watchlists[1].mainContainer.rules[0], new NumericalFieldType('MV Weight'), '>', 'N/A', null, 10),
-    new ComplianceRule(ESGGroup, ESGGroup.watchlists[2].mainContainer.rules[0], new NumericalFieldType('MV Weight'), '>', 'N/A', null, 20),
-    new ComplianceRule(ESGGroup, ESGGroup.watchlists[3].mainContainer.rules[0], new NumericalFieldType('MV Weight'), '>=', 'N/A', null, 10),
-    new ComplianceRule(ESGGroup, ESGGroup.watchlists[4].mainContainer.rules[0], new NumericalFieldType('ESG Score'), '<', 'N/A', 70, 65),
-    new ComplianceRule(UCITSGroup, UCITSGroup.watchlists[0].mainContainer.rules[0], new NumericalFieldType('MV Weight'), '>=', 'N/A', null, 10),
-    new ComplianceRule(UCITSGroup, UCITSGroup.watchlists[1].mainContainer.rules[0], new NumericalFieldType('MV Weight'), '>=', 'N/A', null, 30),
-    new ComplianceRule(UCITSGroup, UCITSGroup.watchlists[2].mainContainer.rules[0], new NumericalFieldType('MV Weight'), '>=', 'N/A', 35, 40),
-    new ComplianceRule(CustomGroup, CustomGroup.watchlists[0].mainContainer.rules[0]),
+    new ComplianceRule(ESGGroup,
+      ESGGroup.watchlists[0],
+      new NumericalFieldType('MV Weight'),
+      '>',
+      'N/A',
+      null,
+      5),
+    new ComplianceRule(ESGGroup, ESGGroup.watchlists[1], new NumericalFieldType('MV Weight'), '>', 'N/A', null, 10),
+    new ComplianceRule(ESGGroup, ESGGroup.watchlists[2], new NumericalFieldType('MV Weight'), '>', 'N/A', null, 20),
+    new ComplianceRule(ESGGroup, ESGGroup.watchlists[3], new NumericalFieldType('MV Weight'), '>=', 'N/A', null, 10),
+    new ComplianceRule(ESGGroup, ESGGroup.watchlists[4], new NumericalFieldType('ESG Score'), '<', 'N/A', 70, 65),
+    new ComplianceRule(UCITSGroup, UCITSGroup.watchlists[0], new NumericalFieldType('MV Weight'), '>=', 'N/A', null, 10),
+    new ComplianceRule(UCITSGroup, UCITSGroup.watchlists[1], new NumericalFieldType('MV Weight'), '>=', 'N/A', null, 30),
+    new ComplianceRule(UCITSGroup, UCITSGroup.watchlists[2], new NumericalFieldType('MV Weight'), '>=', 'N/A', 35, 40),
+    new ComplianceRule(CustomGroup, CustomGroup.watchlists[0], new NumericalFieldType('MV Weight'), '>=', 'N/A', 55, 60),
   ]
 );
