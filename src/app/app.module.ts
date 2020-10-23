@@ -20,6 +20,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
 import { ComplianceRulesTableComponent } from './compliance/components/compliance-rules-table/compliance-rules-table.component';
+import { SaveComplianceDialogComponent } from './compliance/components/compliance-rules-table/save-compliance-dialogue/save-compliance-dialog/save-compliance-dialog.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { ComplianceRulesTableComponent } from './compliance/components/complianc
     WatchlistRulesTableComponent,
     WatchlistRulesLogicComponent,
     SaveWatchlistDiaologueComponent,
-    ComplianceRulesTableComponent
+    ComplianceRulesTableComponent,
+    SaveComplianceDialogComponent
   ],
   imports: [
     BrowserModule,

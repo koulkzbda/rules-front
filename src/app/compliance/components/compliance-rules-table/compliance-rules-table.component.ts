@@ -1,7 +1,9 @@
+import { SaveComplianceDialogComponent } from './save-compliance-dialogue/save-compliance-dialog/save-compliance-dialog.component';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { FIELD_GROUP } from './../../../watchlist/mocks/fieldGroup.mock';
 import { Watchlist } from './../../../watchlist/models/watchlist.model';
-import { FieldType, NumericalFieldType, FieldGroup } from './../../../watchlist/models/fieldType.model';
+import { FieldType, NumericalFieldType } from './../../../watchlist/models/fieldType.model';
 import { MatTableDataSource } from '@angular/material/table';
 import { compliance1, ESGGroup, UCITSGroup, CustomGroup } from './../../mocks/compliance.mock';
 import { Compliance, ComplianceRule, ComplianceRuleGroup } from './../../models/compliance.model';
@@ -14,13 +16,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ComplianceRulesTableComponent implements OnInit {
   compliance: Compliance;
-  complanceNames: string[];
+  complianceNames: string[];
   dataSource: MatTableDataSource<ComplianceRule>;
   displayedColumns = ['drag', 'group', 'complianceRule', 'aggregation', 'condition', 'warning', 'breach', 'regulationThreshold', 'actions'];
   groups: ComplianceRuleGroup[];
   fieldTypes = [];
 
-  constructor() { }
+  constructor(public dialog: MatDialog) { }
 
   addNewRule(): void {
     this.dataSource.data
@@ -31,6 +33,25 @@ export class ComplianceRulesTableComponent implements OnInit {
   deleteRule(index: number): void {
     this.compliance.complianceRules.splice(index, 1);
     this.dataSource = new MatTableDataSource(this.compliance.complianceRules);
+  }
+
+  saveCompliance(): void { }
+
+  saveOrOpenDialog(): void {
+    if (this.complianceNames.indexOf(this.compliance.label) !== -1) {
+      this.openDialog();
+    } else {
+      this.saveCompliance();
+    }
+  }
+
+  openDialog(): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = this.compliance;
+    dialogConfig.maxWidth = 400;
+    const dialogRef = this.dialog.open(SaveComplianceDialogComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe(result => { });
   }
 
   compareByGroupLabel(group1: ComplianceRuleGroup, group2: ComplianceRuleGroup): boolean {
@@ -51,7 +72,7 @@ export class ComplianceRulesTableComponent implements OnInit {
 
   ngOnInit(): void {
     this.compliance = compliance1;
-    this.complanceNames = ['Compliance 1'];
+    this.complianceNames = ['Compliance 1'];
     this.dataSource = new MatTableDataSource(this.compliance.complianceRules);
     this.groups = [ESGGroup, UCITSGroup, CustomGroup];
     FIELD_GROUP.forEach(fieldGroup => {
