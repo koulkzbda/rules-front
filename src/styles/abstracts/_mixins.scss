@@ -10,9 +10,19 @@
 }
 
 @mixin font-size {
-  @each $key, $value in (1: 2.5rem, 2: 2rem, 3: 1.75rem, 4: 1.5rem, 5: 1.25rem, 6: 1rem) {
+  @each $key, $value in $font-sizes {
     .font-size-#{$key} {
       font-size: $value;
+    }
+  }
+}
+
+@mixin width {
+  @each $extremum in min max {
+    @each $key, $value in $widths {
+      .#{$extremum}-width-#{$key} {
+        #{$extremum}-width: $value;
+      }
     }
   }
 }

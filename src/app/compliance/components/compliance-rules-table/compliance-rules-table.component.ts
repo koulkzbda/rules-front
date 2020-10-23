@@ -1,3 +1,4 @@
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { FIELD_GROUP } from './../../../watchlist/mocks/fieldGroup.mock';
 import { Watchlist } from './../../../watchlist/models/watchlist.model';
 import { FieldType, NumericalFieldType, FieldGroup } from './../../../watchlist/models/fieldType.model';
@@ -15,7 +16,7 @@ export class ComplianceRulesTableComponent implements OnInit {
   compliance: Compliance;
   complanceNames: string[];
   dataSource: MatTableDataSource<ComplianceRule>;
-  displayedColumns = ['group', 'complianceRule', 'aggregation', 'condition', 'warning', 'breach', 'regulationThreshold', 'actions'];
+  displayedColumns = ['drag', 'group', 'complianceRule', 'aggregation', 'condition', 'warning', 'breach', 'regulationThreshold', 'actions'];
   groups: ComplianceRuleGroup[];
   fieldTypes = [];
 
@@ -42,6 +43,10 @@ export class ComplianceRulesTableComponent implements OnInit {
 
   compareByFieldLabel(fieldType1: FieldType, fieldType2: FieldType): boolean {
     return fieldType1 && fieldType2 ? fieldType1.label === fieldType2.label : fieldType1 === fieldType2;
+  }
+
+  drop(event: CdkDragDrop<ComplianceRule[]>): void {
+    moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
   }
 
   ngOnInit(): void {
