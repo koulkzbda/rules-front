@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Watchlist } from './../../../models/watchlist.model';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -9,9 +10,11 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class SaveWatchlistDiaologueComponent implements OnInit {
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: Watchlist) { }
+  constructor(@Inject(MAT_DIALOG_DATA) public data: Watchlist, private router: Router) { }
 
-  saveWatchlist(): void { }
+  saveWatchlist(): void {
+    this.router.navigate(['/dashboard']);
+  }
 
   ngOnInit(): void {
   }

@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { SaveComplianceDialogComponent } from './save-compliance-dialogue/save-compliance-dialog/save-compliance-dialog.component';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
@@ -22,7 +23,7 @@ export class ComplianceRulesTableComponent implements OnInit {
   groups: ComplianceRuleGroup[];
   fieldTypes = [];
 
-  constructor(public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog, private router: Router) { }
 
   addNewRule(): void {
     this.dataSource.data
@@ -35,7 +36,9 @@ export class ComplianceRulesTableComponent implements OnInit {
     this.dataSource = new MatTableDataSource(this.compliance.complianceRules);
   }
 
-  saveCompliance(): void { }
+  saveCompliance(): void {
+    this.router.navigate(['/dashboard']);
+  }
 
   saveOrOpenDialog(): void {
     if (this.complianceNames.indexOf(this.compliance.label) !== -1) {

@@ -21,6 +21,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
 import { ComplianceRulesTableComponent } from './compliance/components/compliance-rules-table/compliance-rules-table.component';
 import { SaveComplianceDialogComponent } from './compliance/components/compliance-rules-table/save-compliance-dialogue/save-compliance-dialog/save-compliance-dialog.component';
+import { ProjectCycleComponent } from './projects/components/project-cycle/project-cycle/project-cycle.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { SaveComplianceDialogComponent } from './compliance/components/complianc
     WatchlistRulesLogicComponent,
     SaveWatchlistDiaologueComponent,
     ComplianceRulesTableComponent,
-    SaveComplianceDialogComponent
+    SaveComplianceDialogComponent,
+    ProjectCycleComponent
   ],
   imports: [
     BrowserModule,

@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { SaveWatchlistDiaologueComponent } from './save-watchlist-diaologue/save-watchlist-diaologue.component';
 import { watchlist1 } from './../../mocks/watchlist.mock';
 import { Rule, Watchlist, LogicalContainer } from './../../models/watchlist.model';
@@ -15,7 +16,7 @@ export class WatchlistRulesLogicComponent implements OnInit {
   initialRuleSet: Rule[];
   watchlistNames: string[];
   listContainerRules = [];
-  constructor(public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog, private router: Router) { }
 
   getListContainerConnected(container: LogicalContainer): string[] {
     return this.listContainerRules
@@ -33,7 +34,9 @@ export class WatchlistRulesLogicComponent implements OnInit {
       .filter(container => JSON.stringify(container) !== JSON.stringify(childContainer));
   }
 
-  saveWatchlist(): void { }
+  saveWatchlist(): void {
+    this.router.navigate(['/dashboard']);
+  }
 
   saveOrOpenDialog(): void {
     if (this.watchlistNames.indexOf(this.watchlist.label) !== -1) {
