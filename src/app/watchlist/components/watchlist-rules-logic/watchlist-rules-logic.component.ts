@@ -1,22 +1,25 @@
-import { Router } from '@angular/router';
+import { WatchlistService } from './../../services/watchlist.service';
+import { Router, ActivatedRoute } from '@angular/router';
 import { SaveWatchlistDiaologueComponent } from './save-watchlist-diaologue/save-watchlist-diaologue.component';
-import { watchlist1 } from './../../mocks/watchlist.mock';
 import { Rule, Watchlist, LogicalContainer } from './../../models/watchlist.model';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-watchlist-rules-logic',
   templateUrl: './watchlist-rules-logic.component.html',
   styleUrls: ['./watchlist-rules-logic.component.scss']
 })
-export class WatchlistRulesLogicComponent implements OnInit {
+export class WatchlistRulesLogicComponent implements OnInit, OnDestroy {
+  watchlistSub: Subscription;
   watchlist: Watchlist;
   initialRuleSet: Rule[];
   watchlistNames: string[];
   listContainerRules = [];
-  constructor(public dialog: MatDialog, private router: Router) { }
+  constructor(
+    public dialog: MatDialog, protected watchlistService: WatchlistService, protected router: Router, protected route: ActivatedRoute) { }
 
   getListContainerConnected(container: LogicalContainer): string[] {
     return this.listContainerRules
@@ -76,10 +79,23 @@ export class WatchlistRulesLogicComponent implements OnInit {
       this.listContainerRules.push('containerRules-' + index);
     }
     //this will have to be retreived from the backend API
-    this.watchlistNames = ['Watchlist 1'];
-    this.watchlist = watchlist1;
-
-    this.initialRuleSet = this.watchlist.ruleSet.slice();
+    this.watchlistNames = this.watchlistService.getWatchlistNames('1');
+    this.watchlistSub = this.watchlistService.watchlistObs.subscribe(
+      value => {
+        this.watchlist = value;
+        this.initialRuleSet = this.watchlist.ruleSet.slice();
+      }
+    );
   }
+
+  ngOnDestroy(): void {
+    this.watchlistSub.unsubscribe();
+  }
+
+  get watchlistLabel(): string { return (this.watchlist && this.watchlist.label) ? this.watchlist.label : null; }
+  get watchlistGlobalExpression(): string { return (this.watchlist && this.watchlist.globalExpression) ? this.watchlist.globalExpression : null; }
+  get watchlistUpdatedAt(): Date { return (this.watchlist && this.watchlist.updatedAt) ? this.watchlist.updatedAt : null; }
+  get watchlistMainContainer(): LogicalContainer { return (this.watchlist && this.watchlist.mainContainer) ? this.watchlist.mainContainer : null; }
+  get watchlistRuleSet(): Rule[] { return (this.watchlist && this.watchlist.ruleSet) ? this.watchlist.ruleSet : null; }
 
 }

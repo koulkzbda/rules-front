@@ -7,8 +7,12 @@ import { Routes, RouterModule } from '@angular/router';
 
 const routes: Routes = [
   { path: 'dashboard', component: ProjectCycleComponent },
-  { path: 'watchlist', component: WatchlistRulesTableComponent },
-  { path: 'watchlist/save', component: WatchlistRulesLogicComponent },
+  { path: 'watchlist', redirectTo: '/watchlist/', pathMatch: 'full' },
+  {
+    path: 'watchlist/:watchlistId',
+    component: WatchlistRulesTableComponent
+  },
+  { path: 'save/watchlist', component: WatchlistRulesLogicComponent },
   { path: 'compliance', component: ComplianceRulesTableComponent },
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' }
 ];
