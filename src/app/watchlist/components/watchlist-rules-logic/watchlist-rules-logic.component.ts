@@ -18,13 +18,17 @@ export class WatchlistRulesLogicComponent implements OnInit, OnDestroy {
   initialRuleSet: Rule[];
   watchlistNames: string[];
   listContainerRules = [];
+  loaded = false;
   constructor(
     public dialog: MatDialog, protected watchlistService: WatchlistService, protected router: Router, protected route: ActivatedRoute) { }
 
   getListContainerConnected(container: LogicalContainer): string[] {
-    return this.listContainerRules
-      .filter(containerId => containerId.split('-')[1] !== container.currentInstance.toString())
-      .concat('ruleSet');
+    if (container) {
+      return this.listContainerRules
+        .filter(containerId => containerId.split('-')[1] !== container.currentInstance.toString())
+        .concat('ruleSet');
+    }
+    return ['ruleSet'];
   }
 
   addContainer(container: LogicalContainer): void {
@@ -80,11 +84,16 @@ export class WatchlistRulesLogicComponent implements OnInit, OnDestroy {
     }
     //this will have to be retreived from the backend API
     this.watchlistNames = this.watchlistService.getWatchlistNames('1');
+    console.log('coucou');
     this.watchlistSub = this.watchlistService.watchlistObs.subscribe(
       value => {
         this.watchlist = value;
         this.initialRuleSet = this.watchlist.ruleSet.slice();
-      }
+        this.loaded = true;
+        console.log(this.loaded);
+        console.log(this.watchlist);
+      },
+      err => console.log(err)
     );
   }
 
