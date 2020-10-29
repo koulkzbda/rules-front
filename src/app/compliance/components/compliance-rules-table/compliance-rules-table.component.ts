@@ -1,4 +1,6 @@
-import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { ComplianceService } from './../../services/compliance.service';
+import { Router, ActivatedRoute } from '@angular/router';
 import { SaveComplianceDialogComponent } from './save-compliance-dialogue/save-compliance-dialog/save-compliance-dialog.component';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
@@ -6,29 +8,36 @@ import { FIELD_GROUP } from './../../../watchlist/mocks/fieldGroup.mock';
 import { Watchlist } from './../../../watchlist/models/watchlist.model';
 import { FieldType, NumericalFieldType } from './../../../watchlist/models/fieldType.model';
 import { MatTableDataSource } from '@angular/material/table';
-import { compliance1, ESGGroup, UCITSGroup, CustomGroup } from './../../mocks/compliance.mock';
 import { Compliance, ComplianceRule, ComplianceRuleGroup } from './../../models/compliance.model';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 @Component({
   selector: 'app-compliance-rules-table',
   templateUrl: './compliance-rules-table.component.html',
   styleUrls: ['./compliance-rules-table.component.scss']
 })
-export class ComplianceRulesTableComponent implements OnInit {
+export class ComplianceRulesTableComponent implements OnInit, OnDestroy {
+  complianceSub: Subscription;
   compliance: Compliance;
+  transmittedCompliance: Compliance;
   complianceNames: string[];
   dataSource: MatTableDataSource<ComplianceRule>;
   displayedColumns = ['drag', 'group', 'complianceRule', 'aggregation', 'condition', 'warning', 'breach', 'regulationThreshold', 'actions'];
   groups: ComplianceRuleGroup[];
   fieldTypes = [];
 
-  constructor(public dialog: MatDialog, private router: Router) { }
+  constructor(
+    public dialog: MatDialog,
+    protected complianceService: ComplianceService,
+    protected router: Router,
+    protected route: ActivatedRoute) { }
 
   addNewRule(): void {
+    const complianceRuleAdded = new ComplianceRule(this.groups[0], this.groups[0].watchlists[0].mainContainer.rules[0], new NumericalFieldType('MV Weight'), '>', 'N/A', null, 5);
     this.dataSource.data
-      .push(new ComplianceRule(ESGGroup, ESGGroup.watchlists[0].mainContainer.rules[0], new NumericalFieldType('MV Weight'), '>', 'N/A', null, 5));
+      .push(complianceRuleAdded);
     this.dataSource.filter = '';
+    console.log(complianceRuleAdded);
   }
 
   deleteRule(index: number): void {
@@ -73,11 +82,29 @@ export class ComplianceRulesTableComponent implements OnInit {
     moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
   }
 
+  updateCompliance(): void {
+    this.complianceService.transmitCompliance(this.compliance);
+  }
+
   ngOnInit(): void {
-    this.compliance = compliance1;
-    this.complianceNames = ['Compliance 1'];
+    this.route.paramMap.subscribe(params => {
+      const complianceId = params.get('complianceId');
+      this.complianceSub = this.complianceService.complianceObs.subscribe(
+        value => this.transmittedCompliance = value
+      );
+      if (complianceId) {
+        if (this.transmittedCompliance && this.transmittedCompliance.id && complianceId === this.transmittedCompliance.id.toString()) {
+          this.compliance = this.transmittedCompliance;
+        } else {
+          this.compliance = this.complianceService.getCompliance(complianceId);
+        }
+      } else {
+        this.compliance = this.transmittedCompliance.id ? new Compliance() : this.transmittedCompliance;
+      }
+    });
+    this.complianceNames = this.complianceService.getComplianceNames('1');
     this.dataSource = new MatTableDataSource(this.compliance.complianceRules);
-    this.groups = [ESGGroup, UCITSGroup, CustomGroup];
+    this.groups = this.complianceService.getComplianceGroup('1');
     FIELD_GROUP.forEach(fieldGroup => {
       fieldGroup.fields.forEach(fieldType => {
         if (fieldType instanceof NumericalFieldType) {
@@ -85,6 +112,10 @@ export class ComplianceRulesTableComponent implements OnInit {
         }
       });
     });
+  }
+
+  ngOnDestroy(): void {
+    this.complianceSub.unsubscribe();
   }
 
 }

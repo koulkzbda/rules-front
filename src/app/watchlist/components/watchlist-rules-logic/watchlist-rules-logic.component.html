@@ -30,14 +30,13 @@
     </div>
     <div class="row my-3">
       <div class="col d-flex justify-content-around">
-        <a routerLink="/watchlist" mat-raised-button color="accent" class="a-in-mat-button">EDTT RULES</a>
+        <a routerLink="/watchlist/{{watchlist.getId()}}" mat-raised-button color="accent" class="a-in-mat-button">EDTT
+          RULES</a>
         <button (click)="saveOrOpenDialog()" mat-raised-button color="primary">SAVE</button>
       </div>
     </div>
   </div>
 </form>
-
-<div>{{loaded}}</div>
 
 <ng-template #recursiveContainerTmpl let-container="container" let-parent="parent">
   <div class="border rounded mb-3 mx-3 h-100 bg-white">

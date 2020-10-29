@@ -17,8 +17,7 @@
           </th>
           <td mat-cell *matCellDef="let rule; let i = index" class="text-center border">
             <mat-form-field appearance="outline" class="mat-form-field-padding-top">
-              <mat-select [(value)]="watchlist.ruleSet[i].fieldType" [compareWith]="compareByFieldLabel"
-                (change)="updateWatchlist()">
+              <mat-select [(value)]="watchlist.ruleSet[i].fieldType" [compareWith]="compareByFieldLabel">
                 <mat-optgroup *ngFor="let group of fieldGroup" [label]="group.label">
                   <mat-option *ngFor="let field of group.fields" [value]="field">
                     {{field.label}}
@@ -34,7 +33,7 @@
           </th>
           <td mat-cell *matCellDef="let rule; let i = index" class="text-center border">
             <mat-form-field appearance="outline" class="mat-form-field-padding-top">
-              <mat-select [(value)]="watchlist.ruleSet[i].condition" (change)="updateWatchlist()">
+              <mat-select [(value)]="watchlist.ruleSet[i].condition">
                 <mat-option *ngFor="let condition of watchlist.ruleSet[i].fieldType.conditions" [value]="condition">
                   {{condition}}
                 </mat-option>
@@ -49,7 +48,7 @@
           <td mat-cell *matCellDef="let rule; let i = index" class="text-center border">
             <mat-form-field appearance="outline" class="mat-form-field-padding-top"
               *ngIf="watchlist.ruleSet[i].fieldType.constructor.name === 'EnumerartionalFieldType'">
-              <mat-select [(value)]="watchlist.ruleSet[i].input" multiple (change)="updateWatchlist()">
+              <mat-select [(value)]="watchlist.ruleSet[i].input" multiple>
                 <mat-option *ngFor="let input of watchlist.ruleSet[i].fieldType.inputs" [value]="input">
                   {{input}}
                 </mat-option>
@@ -57,8 +56,7 @@
             </mat-form-field>
             <mat-form-field appearance="outline" class="mat-form-field-padding-top"
               *ngIf="watchlist.ruleSet[i].fieldType.constructor.name === 'NumericalFieldType'">
-              <input matInput [(ngModel)]="watchlist.ruleSet[i].input[0]" name="input-{{i}}"
-                (change)="updateWatchlist()">
+              <input matInput [(ngModel)]="watchlist.ruleSet[i].input[0]" name="input-{{i}}">
             </mat-form-field>
           </td>
         </ng-container>
@@ -67,7 +65,7 @@
           <th mat-header-cell *matHeaderCellDef class="text-center text-white font-weight-normal font-size-5"> Actions
           </th>
           <td mat-cell *matCellDef="let rule; let i = index" class="text-center border">
-            <button (click)="deleteRule(i); updateWatchlist()" mat-icon-button>
+            <button (click)="deleteRule(i)" mat-icon-button>
               <mat-icon class="pl-3">delete</mat-icon>
             </button>
           </td>
@@ -79,10 +77,11 @@
     </div>
   </div>
   <div class="col-12 mt-3">
-    <button (click)="addNewRule(); updateWatchlist()" mat-button color="primary">CREATE A NEW RULE</button>
+    <button (click)="addNewRule()" mat-button color="primary">CREATE A NEW RULE</button>
   </div>
   <div class="col-12 d-flex justify-content-around my-3">
-    <a routerLink="/dashboard" mat-raised-button color="accent" class="a-in-mat-button">BACK</a>
-    <a routerLink="/save/watchlist" mat-raised-button color="primary" class="a-in-mat-button">NEXT</a>
+    <a (click)="updateWatchlist()" routerLink="/dashboard" mat-raised-button color="accent"
+      class="a-in-mat-button">BACK</a>
+    <button (click)="goToLogic()" mat-raised-button color="primary">NEXT</button>
   </div>
 </form>

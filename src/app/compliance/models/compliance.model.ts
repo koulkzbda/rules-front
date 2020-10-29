@@ -22,11 +22,23 @@ export class ComplianceRule {
 }
 
 export class Compliance {
+  public label?: string;
+  public comment?: string;
+  public createdAt?: Date;
+  public complianceRules?: ComplianceRule[];
+  public id?: number;
   constructor(
-    public label?: string,
-    public comment?: string,
-    public createdAt?: Date,
-    public complianceRules?: ComplianceRule[]
-  ) { }
+    label?: string,
+    comment?: string,
+    createdAt?: Date,
+    complianceRules?: ComplianceRule[],
+    id?: number
+  ) {
+    this.label = label;
+    this.comment = comment;
+    this.createdAt = createdAt;
+    this.complianceRules = complianceRules ? complianceRules : [];
+    this.id = id;
+  }
 }
 

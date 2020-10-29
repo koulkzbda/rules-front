@@ -14,13 +14,13 @@ import { Subscription } from 'rxjs';
 })
 export class WatchlistRulesLogicComponent implements OnInit, OnDestroy {
   watchlistSub: Subscription;
-  watchlist: Watchlist;
+  watchlist = new Watchlist();
   initialRuleSet: Rule[];
   watchlistNames: string[];
   listContainerRules = [];
-  loaded = false;
   constructor(
-    public dialog: MatDialog, protected watchlistService: WatchlistService, protected router: Router, protected route: ActivatedRoute) { }
+    public dialog: MatDialog, protected watchlistService: WatchlistService, protected router: Router, protected route: ActivatedRoute) {
+  }
 
   getListContainerConnected(container: LogicalContainer): string[] {
     if (container) {
@@ -39,6 +39,7 @@ export class WatchlistRulesLogicComponent implements OnInit, OnDestroy {
   deleteContainer(parentContainer: LogicalContainer, childContainer: LogicalContainer): void {
     parentContainer.containers = parentContainer.containers
       .filter(container => JSON.stringify(container) !== JSON.stringify(childContainer));
+    this.updateWatchlist();
   }
 
   saveWatchlist(): void {
@@ -72,10 +73,24 @@ export class WatchlistRulesLogicComponent implements OnInit, OnDestroy {
         event.currentIndex);
       this.resetRuleSet();
     }
+    this.updateWatchlist();
   }
 
   resetRuleSet(): void {
     this.watchlist.ruleSet = this.initialRuleSet.slice();
+  }
+
+  retrieveWatchlist(): void {
+    this.watchlistSub = this.watchlistService.watchlistObs.subscribe(
+      value => {
+        this.watchlist = value;
+        this.initialRuleSet = this.watchlist.ruleSet.slice();
+      }
+    );
+  }
+
+  updateWatchlist(): void {
+    this.watchlistService.transmitWatchlist(this.watchlist);
   }
 
   ngOnInit(): void {
@@ -84,27 +99,10 @@ export class WatchlistRulesLogicComponent implements OnInit, OnDestroy {
     }
     //this will have to be retreived from the backend API
     this.watchlistNames = this.watchlistService.getWatchlistNames('1');
-    console.log('coucou');
-    this.watchlistSub = this.watchlistService.watchlistObs.subscribe(
-      value => {
-        this.watchlist = value;
-        this.initialRuleSet = this.watchlist.ruleSet.slice();
-        this.loaded = true;
-        console.log(this.loaded);
-        console.log(this.watchlist);
-      },
-      err => console.log(err)
-    );
+    this.retrieveWatchlist();
   }
 
   ngOnDestroy(): void {
     this.watchlistSub.unsubscribe();
   }
-
-  get watchlistLabel(): string { return (this.watchlist && this.watchlist.label) ? this.watchlist.label : null; }
-  get watchlistGlobalExpression(): string { return (this.watchlist && this.watchlist.globalExpression) ? this.watchlist.globalExpression : null; }
-  get watchlistUpdatedAt(): Date { return (this.watchlist && this.watchlist.updatedAt) ? this.watchlist.updatedAt : null; }
-  get watchlistMainContainer(): LogicalContainer { return (this.watchlist && this.watchlist.mainContainer) ? this.watchlist.mainContainer : null; }
-  get watchlistRuleSet(): Rule[] { return (this.watchlist && this.watchlist.ruleSet) ? this.watchlist.ruleSet : null; }
-
 }

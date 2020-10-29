@@ -2,14 +2,14 @@ import { watchlist1 } from './../mocks/watchlist.mock';
 import { HttpClient } from '@angular/common/http';
 import { Watchlist } from './../models/watchlist.model';
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WatchlistService {
 
-  protected watchlist = new Subject<Watchlist>();
+  protected watchlist = new BehaviorSubject<Watchlist>(new Watchlist());
 
   get watchlistObs(): Observable<Watchlist> {
     return this.watchlist.asObservable();

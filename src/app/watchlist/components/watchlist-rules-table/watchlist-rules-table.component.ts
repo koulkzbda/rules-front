@@ -1,7 +1,8 @@
+import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { WatchlistService } from './../../services/watchlist.service';
 import { FIELD_GROUP } from './../../mocks/fieldGroup.mock';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Rule, Watchlist } from '../../models/watchlist.model';
 import { MatTableDataSource } from '@angular/material/table';
 import { FieldType, NumericalFieldType } from '../../models/fieldType.model';
@@ -11,8 +12,10 @@ import { FieldType, NumericalFieldType } from '../../models/fieldType.model';
   templateUrl: './watchlist-rules-table.component.html',
   styleUrls: ['./watchlist-rules-table.component.scss']
 })
-export class WatchlistRulesTableComponent implements OnInit {
+export class WatchlistRulesTableComponent implements OnInit, OnDestroy {
+  watchlistSub: Subscription;
   watchlist = new Watchlist();
+  transmittedWatchlist: Watchlist;
   initialRuleSet: Rule[];
   displayedColumns = ['field', 'condition', 'input', 'actions'];
   dataSource: MatTableDataSource<Rule>;
@@ -38,16 +41,31 @@ export class WatchlistRulesTableComponent implements OnInit {
     this.watchlistService.transmitWatchlist(this.watchlist);
   }
 
+  goToLogic(): void {
+    this.updateWatchlist();
+    this.router.navigate(['/save/watchlist']);
+  }
+
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       const watchlistId = params.get('watchlistId');
+      this.watchlistSub = this.watchlistService.watchlistObs.subscribe(
+        value => this.transmittedWatchlist = value
+      );
       if (watchlistId) {
-        this.watchlist = this.watchlistService.getWatchlist(watchlistId);
+        if (this.transmittedWatchlist && this.transmittedWatchlist.id && watchlistId === this.transmittedWatchlist.id.toString()) {
+          this.watchlist = this.transmittedWatchlist;
+        } else {
+          this.watchlist = this.watchlistService.getWatchlist(watchlistId);
+        }
       } else {
-        this.watchlist = new Watchlist();
+        this.watchlist = this.transmittedWatchlist.id ? new Watchlist() : this.transmittedWatchlist;
       }
     });
     this.dataSource = new MatTableDataSource(this.watchlist.ruleSet);
   }
 
+  ngOnDestroy(): void {
+    this.watchlistSub.unsubscribe();
+  }
 }

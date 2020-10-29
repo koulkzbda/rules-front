@@ -6,20 +6,26 @@ export class Watchlist {
   public updatedAt?: Date;
   public mainContainer?: LogicalContainer;
   public ruleSet?: Rule[];
+  public id?: number;
   constructor(
     label?,
     globalExpression?,
     updatedAt?,
     mainContainer?,
-    ruleSet?
+    ruleSet?,
     //backend will walk through the mainContainer tree to create this array
     //composed with each leaves
+    id?
   ) {
     this.label = label;
     this.globalExpression = globalExpression;
     this.updatedAt = updatedAt;
     this.mainContainer = mainContainer == null ? new LogicalContainer() : mainContainer;
     this.ruleSet = ruleSet == null ? [] : ruleSet;
+    this.id = id;
+  }
+  getId(): string {
+    return this.id ? this.id.toString() : '';
   }
 }
 
