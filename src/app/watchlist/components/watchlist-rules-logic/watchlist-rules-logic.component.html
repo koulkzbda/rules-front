@@ -4,7 +4,7 @@
       <div class="col-12 col-sm-5">
         <mat-form-field appearance="outline">
           <mat-label>Watchlist name</mat-label>
-          <input matInput [(ngModel)]="watchlist.label" name="label">
+          <input matInput [(ngModel)]="watchlist && watchlist.label" name="label">
         </mat-form-field>
       </div>
     </div>
@@ -15,22 +15,23 @@
       <div class="col-12 col-md-6">
         <div class="d-flex flex-column justify-content-center h-100 border rounded bg-white">
           <mat-selection-list [multiple]="false" id="ruleSet" cdkDropList cdkDropListSortingDisabled
-            [cdkDropListData]="watchlist.ruleSet" (cdkDropListDropped)="dropWithoutDuplicates($event)"
+            [cdkDropListData]="watchlist && watchlist.ruleSet" (cdkDropListDropped)="dropWithoutDuplicates($event)"
             #ruleSet="cdkDropList" [cdkDropListConnectedTo]="listContainerRules" class="border bg-light rounded mx-2">
-            <mat-list-option *ngFor="let rule of watchlist.ruleSet" cdkDrag>
+            <mat-list-option *ngFor="let rule of watchlist?.ruleSet" cdkDrag>
               {{rule.fieldType.label}} {{rule.condition}} {{rule.getInputAsString()}}
             </mat-list-option>
           </mat-selection-list>
         </div>
       </div>
       <div class="col-12 col-md-6 mt-md-0 mt-5">
-        <ng-container *ngTemplateOutlet="recursiveContainerTmpl; context: { container: watchlist.mainContainer }">
+        <ng-container *ngTemplateOutlet="recursiveContainerTmpl; context: { container: watchlist?.mainContainer }">
         </ng-container>
       </div>
     </div>
     <div class="row my-3">
       <div class="col d-flex justify-content-around">
-        <a routerLink="/watchlist" mat-raised-button color="accent" class="a-in-mat-button">EDTT RULES</a>
+        <a routerLink="/watchlist/{{watchlist.getId()}}" mat-raised-button color="accent" class="a-in-mat-button">EDTT
+          RULES</a>
         <button (click)="saveOrOpenDialog()" mat-raised-button color="primary">SAVE</button>
       </div>
     </div>
@@ -42,7 +43,7 @@
     <div class="d-flex justify-content-between">
       <mat-form-field appearance="fill">
         <mat-label>Satisfy</mat-label>
-        <mat-select name="containerType" [(ngModel)]="container.type">
+        <mat-select name="containerType" [(ngModel)]="container && container.type">
           <mat-option value="AND">ALL OF</mat-option>
           <mat-option value="OR">ANY OF</mat-option>
         </mat-select>
@@ -52,14 +53,14 @@
       </button>
     </div>
     <div>
-      <mat-selection-list id="containerRules-{{container.currentInstance}}" cdkDropList
-        [cdkDropListData]="container.rules" (cdkDropListDropped)="dropWithoutDuplicates($event)"
+      <mat-selection-list id="containerRules-{{container?.currentInstance}}" cdkDropList
+        [cdkDropListData]="container?.rules" (cdkDropListDropped)="dropWithoutDuplicates($event)"
         [cdkDropListConnectedTo]="getListContainerConnected(container)" [multiple]="false"
         class="bg-light m-2 border rounded">
-        <p *ngIf="container.rules.length <= 0" class="ml-3 text-muted">
+        <p *ngIf="container?.rules.length <= 0" class="ml-3 text-muted">
           Drop rules here...
         </p>
-        <mat-list-option *ngFor="let rule of container.rules" cdkDrag>
+        <mat-list-option *ngFor="let rule of container?.rules" cdkDrag>
           {{rule.fieldType.label}} {{rule.condition}} {{rule.getInputAsString()}}
         </mat-list-option>
       </mat-selection-list>

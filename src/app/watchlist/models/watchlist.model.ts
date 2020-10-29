@@ -1,15 +1,32 @@
 import { FieldType } from './fieldType.model';
 
 export class Watchlist {
+  public label?: string;
+  public globalExpression?: string;
+  public updatedAt?: Date;
+  public mainContainer?: LogicalContainer;
+  public ruleSet?: Rule[];
+  public id?: number;
   constructor(
-    public label?: string,
-    public globalExpression?: string,
-    public updatedAt?: Date,
-    public mainContainer?: LogicalContainer,
-    public ruleSet?: Rule[]
+    label?,
+    globalExpression?,
+    updatedAt?,
+    mainContainer?,
+    ruleSet?,
     //backend will walk through the mainContainer tree to create this array
     //composed with each leaves
-  ) { }
+    id?
+  ) {
+    this.label = label;
+    this.globalExpression = globalExpression;
+    this.updatedAt = updatedAt;
+    this.mainContainer = mainContainer == null ? new LogicalContainer() : mainContainer;
+    this.ruleSet = ruleSet == null ? [] : ruleSet;
+    this.id = id;
+  }
+  getId(): string {
+    return this.id ? this.id.toString() : '';
+  }
 }
 
 export class LogicalContainer {

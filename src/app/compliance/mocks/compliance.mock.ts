@@ -119,5 +119,6 @@ export let compliance1 = new Compliance(
     new ComplianceRule(UCITSGroup, UCITSGroup.watchlists[1], new NumericalFieldType('MV Weight'), '>=', 'N/A', null, 30),
     new ComplianceRule(UCITSGroup, UCITSGroup.watchlists[2], new NumericalFieldType('MV Weight'), '>=', 'N/A', 35, 40),
     new ComplianceRule(CustomGroup, CustomGroup.watchlists[0], new NumericalFieldType('MV Weight'), '>=', 'N/A', 55, 60),
-  ]
+  ],
+  1
 );

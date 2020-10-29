@@ -1,27 +1,34 @@
-import { Router } from '@angular/router';
+import { WatchlistService } from './../../services/watchlist.service';
+import { Router, ActivatedRoute } from '@angular/router';
 import { SaveWatchlistDiaologueComponent } from './save-watchlist-diaologue/save-watchlist-diaologue.component';
-import { watchlist1 } from './../../mocks/watchlist.mock';
 import { Rule, Watchlist, LogicalContainer } from './../../models/watchlist.model';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-watchlist-rules-logic',
   templateUrl: './watchlist-rules-logic.component.html',
   styleUrls: ['./watchlist-rules-logic.component.scss']
 })
-export class WatchlistRulesLogicComponent implements OnInit {
-  watchlist: Watchlist;
+export class WatchlistRulesLogicComponent implements OnInit, OnDestroy {
+  watchlistSub: Subscription;
+  watchlist = new Watchlist();
   initialRuleSet: Rule[];
   watchlistNames: string[];
   listContainerRules = [];
-  constructor(public dialog: MatDialog, private router: Router) { }
+  constructor(
+    public dialog: MatDialog, protected watchlistService: WatchlistService, protected router: Router, protected route: ActivatedRoute) {
+  }
 
   getListContainerConnected(container: LogicalContainer): string[] {
-    return this.listContainerRules
-      .filter(containerId => containerId.split('-')[1] !== container.currentInstance.toString())
-      .concat('ruleSet');
+    if (container) {
+      return this.listContainerRules
+        .filter(containerId => containerId.split('-')[1] !== container.currentInstance.toString())
+        .concat('ruleSet');
+    }
+    return ['ruleSet'];
   }
 
   addContainer(container: LogicalContainer): void {
@@ -32,6 +39,7 @@ export class WatchlistRulesLogicComponent implements OnInit {
   deleteContainer(parentContainer: LogicalContainer, childContainer: LogicalContainer): void {
     parentContainer.containers = parentContainer.containers
       .filter(container => JSON.stringify(container) !== JSON.stringify(childContainer));
+    this.updateWatchlist();
   }
 
   saveWatchlist(): void {
@@ -65,10 +73,24 @@ export class WatchlistRulesLogicComponent implements OnInit {
         event.currentIndex);
       this.resetRuleSet();
     }
+    this.updateWatchlist();
   }
 
   resetRuleSet(): void {
     this.watchlist.ruleSet = this.initialRuleSet.slice();
+  }
+
+  retrieveWatchlist(): void {
+    this.watchlistSub = this.watchlistService.watchlistObs.subscribe(
+      value => {
+        this.watchlist = value;
+        this.initialRuleSet = this.watchlist.ruleSet.slice();
+      }
+    );
+  }
+
+  updateWatchlist(): void {
+    this.watchlistService.transmitWatchlist(this.watchlist);
   }
 
   ngOnInit(): void {
@@ -76,10 +98,11 @@ export class WatchlistRulesLogicComponent implements OnInit {
       this.listContainerRules.push('containerRules-' + index);
     }
     //this will have to be retreived from the backend API
-    this.watchlistNames = ['Watchlist 1'];
-    this.watchlist = watchlist1;
-
-    this.initialRuleSet = this.watchlist.ruleSet.slice();
+    this.watchlistNames = this.watchlistService.getWatchlistNames('1');
+    this.retrieveWatchlist();
   }
 
+  ngOnDestroy(): void {
+    this.watchlistSub.unsubscribe();
+  }
 }

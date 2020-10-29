@@ -50,5 +50,6 @@ export let watchlist1 = new Watchlist(
     new Rule(new NumericalFieldType('S BMK Diff'), '<', ['0']),
     new Rule(new NumericalFieldType('Major Incidents'), '>', ['0']),
     new Rule(new NumericalFieldType('ESG Score'), 'BOTTOM', ['5']),
-  ]
+  ],
+  1
 );

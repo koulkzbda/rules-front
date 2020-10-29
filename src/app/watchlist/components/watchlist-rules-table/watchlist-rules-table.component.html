@@ -80,7 +80,8 @@
     <button (click)="addNewRule()" mat-button color="primary">CREATE A NEW RULE</button>
   </div>
   <div class="col-12 d-flex justify-content-around my-3">
-    <a routerLink="/dashboard" mat-raised-button color="accent" class="a-in-mat-button">BACK</a>
-    <a routerLink="/watchlist/save" mat-raised-button color="primary" class="a-in-mat-button">NEXT</a>
+    <a (click)="updateWatchlist()" routerLink="/dashboard" mat-raised-button color="accent"
+      class="a-in-mat-button">BACK</a>
+    <button (click)="goToLogic()" mat-raised-button color="primary">NEXT</button>
   </div>
 </form>
