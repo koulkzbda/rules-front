@@ -20,7 +20,15 @@ export let ESGGroup = new ComplianceRuleGroup(
           'IN',
           ['Oil & Gas']
         )]
-      )
+      ),
+      [new Rule(
+        new EnumerartionalFieldType(
+          'Sector',
+          ['IT', 'Communications', 'Staples', 'Discretionary', 'Financial', 'Real Estate', 'Industrials', 'Energy', 'Materials', 'Telecommunications', 'Health', 'Oil & Gas']
+        ),
+        'IN',
+        ['Oil & Gas']
+      )]
     ),
     new Watchlist(
       'ESG Score < 50',
@@ -29,7 +37,8 @@ export let ESGGroup = new ComplianceRuleGroup(
       new LogicalContainer(
         'AND',
         [new Rule(new NumericalFieldType('ESG Score'), '<', ['50'])]
-      )
+      ),
+      [new Rule(new NumericalFieldType('ESG Score'), '<', ['50'])]
     ),
     new Watchlist(
       'Carbon Footprint > 200',
@@ -38,7 +47,8 @@ export let ESGGroup = new ComplianceRuleGroup(
       new LogicalContainer(
         'AND',
         [new Rule(new NumericalFieldType('Carbon Footprint'), '>', ['200'])]
-      )
+      ),
+      [new Rule(new NumericalFieldType('Carbon Footprint'), '>', ['200'])]
     ),
     new Watchlist(
       'Child Labor',
@@ -47,7 +57,8 @@ export let ESGGroup = new ComplianceRuleGroup(
       new LogicalContainer(
         'AND',
         [new Rule(new NumericalFieldType('Child Labor'), '>', ['0'])]
-      )
+      ),
+      [new Rule(new NumericalFieldType('Child Labor'), '>', ['0'])]
     ),
     new Watchlist(
       'Weighted Average ESG',
@@ -56,7 +67,8 @@ export let ESGGroup = new ComplianceRuleGroup(
       new LogicalContainer(
         'AND',
         [new Rule(new NumericalFieldType('Weighted Average ESG'), '<', ['50'])]
-      )
+      ),
+      [new Rule(new NumericalFieldType('Weighted Average ESG'), '<', ['50'])]
     ),
   ]
 );
@@ -71,7 +83,8 @@ export let UCITSGroup = new ComplianceRuleGroup(
       new LogicalContainer(
         'AND',
         [new Rule(new NumericalFieldType('MV'), 'TOP', ['1'])]
-      )
+      ),
+      [new Rule(new NumericalFieldType('MV'), 'TOP', ['1'])]
     ),
     new Watchlist(
       'TOP MV 3',
@@ -80,7 +93,8 @@ export let UCITSGroup = new ComplianceRuleGroup(
       new LogicalContainer(
         'AND',
         [new Rule(new NumericalFieldType('MV'), 'TOP', ['3'])]
-      )
+      ),
+      [new Rule(new NumericalFieldType('MV'), 'TOP', ['3'])]
     ),
     new Watchlist(
       'TOP MV 5',
@@ -89,7 +103,8 @@ export let UCITSGroup = new ComplianceRuleGroup(
       new LogicalContainer(
         'AND',
         [new Rule(new NumericalFieldType('MV'), 'TOP', ['5'])]
-      )
+      ),
+      [new Rule(new NumericalFieldType('MV'), 'TOP', ['5'])]
     ),
   ]
 );

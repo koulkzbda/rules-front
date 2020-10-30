@@ -51,6 +51,10 @@
                   [value]="watchlist">
                   {{watchlist.label}}
                 </mat-option>
+                <mat-option (click)="addNewWatchlistRule(i)" [value]="compliance.complianceRules[i].rule">
+                  <button mat-button color="primary" class="w-100 h-100">NEW
+                    RULE</button>
+                </mat-option>
               </mat-select>
             </mat-form-field>
           </td>
@@ -137,7 +141,7 @@
     </div>
   </div>
   <div class="col-12 mt-3">
-    <button (click)="addNewRule()" mat-button color="primary">CREATE A NEW RULE</button>
+    <button (click)="addNewComplianceRule()" mat-button color="primary">CREATE A NEW RULE</button>
   </div>
   <div class="col-12 d-flex justify-content-around my-3">
     <a (click)="updateCompliance()" routerLink="/dashboard" mat-raised-button color="accent"

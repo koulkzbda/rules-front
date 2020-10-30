@@ -1,3 +1,4 @@
+import { CreateRuleDialogComponent } from './create-rule-dialog/create-rule-dialog.component';
 import { Subscription } from 'rxjs';
 import { ComplianceService } from './../../services/compliance.service';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -6,9 +7,9 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { FIELD_GROUP } from './../../../watchlist/mocks/fieldGroup.mock';
 import { Watchlist } from './../../../watchlist/models/watchlist.model';
-import { FieldType, NumericalFieldType } from './../../../watchlist/models/fieldType.model';
+import { FieldType, NumericalFieldType, FieldGroup } from './../../../watchlist/models/fieldType.model';
 import { MatTableDataSource } from '@angular/material/table';
-import { Compliance, ComplianceRule, ComplianceRuleGroup } from './../../models/compliance.model';
+import { Compliance, ComplianceRule, ComplianceRuleGroup, ComplianceRuleBuilder } from './../../models/compliance.model';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
 @Component({
@@ -25,6 +26,7 @@ export class ComplianceRulesTableComponent implements OnInit, OnDestroy {
   displayedColumns = ['drag', 'group', 'complianceRule', 'aggregation', 'condition', 'warning', 'breach', 'regulationThreshold', 'actions'];
   groups: ComplianceRuleGroup[];
   fieldTypes = [];
+  fieldGroup: FieldGroup[];
 
   constructor(
     public dialog: MatDialog,
@@ -32,17 +34,21 @@ export class ComplianceRulesTableComponent implements OnInit, OnDestroy {
     protected router: Router,
     protected route: ActivatedRoute) { }
 
-  addNewRule(): void {
+  addNewComplianceRule(): void {
     const complianceRuleAdded = new ComplianceRule(this.groups[0], this.groups[0].watchlists[0].mainContainer.rules[0], new NumericalFieldType('MV Weight'), '>', 'N/A', null, 5);
     this.dataSource.data
       .push(complianceRuleAdded);
     this.dataSource.filter = '';
-    console.log(complianceRuleAdded);
   }
 
   deleteRule(index: number): void {
     this.compliance.complianceRules.splice(index, 1);
     this.dataSource = new MatTableDataSource(this.compliance.complianceRules);
+  }
+
+  addNewWatchlistRule(index: number): void {
+    this.updateCompliance();
+    this.openAddWatchlistRuleDialog(index);
   }
 
   saveCompliance(): void {
@@ -64,6 +70,21 @@ export class ComplianceRulesTableComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(SaveComplianceDialogComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(result => { });
+  }
+
+  openAddWatchlistRuleDialog(i: number): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = new ComplianceRuleBuilder(this.compliance, i, this.fieldGroup);
+    dialogConfig.maxWidth = 1100;
+    const dialogRef = this.dialog.open(CreateRuleDialogComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe(
+      result => {
+        this.complianceSub = this.complianceService.complianceObs.subscribe(
+          value => this.compliance = value
+        );
+      }
+    );
   }
 
   compareByGroupLabel(group1: ComplianceRuleGroup, group2: ComplianceRuleGroup): boolean {
@@ -105,7 +126,8 @@ export class ComplianceRulesTableComponent implements OnInit, OnDestroy {
     this.complianceNames = this.complianceService.getComplianceNames('1');
     this.dataSource = new MatTableDataSource(this.compliance.complianceRules);
     this.groups = this.complianceService.getComplianceGroup('1');
-    FIELD_GROUP.forEach(fieldGroup => {
+    this.fieldGroup = FIELD_GROUP;
+    this.fieldGroup.forEach(fieldGroup => {
       fieldGroup.fields.forEach(fieldType => {
         if (fieldType instanceof NumericalFieldType) {
           this.fieldTypes.push(fieldType);

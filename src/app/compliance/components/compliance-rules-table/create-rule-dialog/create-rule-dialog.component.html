@@ -1,0 +1,42 @@
+<h2 mat-dialog-title>Create a new filter or criteria rule</h2>
+<mat-dialog-content class="mat-typography">
+  <mat-form-field appearance="outline" class="mat-form-field-padding-top">
+    <mat-select [(value)]="data.compliance.complianceRules[data.index].rule.ruleSet[0].fieldType"
+      [compareWith]="compareByFieldLabel">
+      <mat-optgroup *ngFor="let group of data.fieldGroup" [label]="group.label">
+        <mat-option *ngFor="let field of group.fields" [value]="field">
+          {{field.label}}
+        </mat-option>
+      </mat-optgroup>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="mat-form-field-padding-top">
+    <mat-select [(value)]="data.compliance.complianceRules[data.index].rule.ruleSet[0].condition">
+      <mat-option
+        *ngFor="let condition of data.compliance.complianceRules[data.index].rule.ruleSet[0].fieldType.conditions"
+        [value]="condition">
+        {{condition}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="mat-form-field-padding-top"
+    *ngIf="data.compliance.complianceRules[data.index].rule.ruleSet[0].fieldType?.conditions[0] === 'IN'">
+    <mat-select [(value)]="data.compliance.complianceRules[data.index].rule.ruleSet[0].input" multiple>
+      <mat-option *ngFor="let input of data.compliance.complianceRules[data.index].rule.ruleSet[0].fieldType.inputs"
+        [value]="input">
+        {{input}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field appearance="outline" class="mat-form-field-padding-top"
+    *ngIf="data.compliance.complianceRules[data.index].rule.ruleSet[0].fieldType?.conditions[0] === 'TOP'">
+    <input matInput [(ngModel)]="data.compliance.complianceRules[data.index].rule.ruleSet[0].input[0]" name="input">
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button (click)="closeDialog()" mat-button mat-dialog-close class="color-grey text-white">CANCEL</button>
+  <button (click)="updateCompliance()" mat-button [mat-dialog-close]="true" cdkFocusInitial color="primary">CREATE
+    RULE</button>
+</mat-dialog-actions>

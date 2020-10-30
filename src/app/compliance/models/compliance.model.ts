@@ -1,4 +1,4 @@
-import { NumericalFieldType } from '../../watchlist/models/fieldType.model';
+import { FieldGroup, NumericalFieldType } from '../../watchlist/models/fieldType.model';
 import { Watchlist } from './../../watchlist/models/watchlist.model';
 export class ComplianceRuleGroup {
   constructor(
@@ -42,3 +42,10 @@ export class Compliance {
   }
 }
 
+export class ComplianceRuleBuilder {
+  constructor(
+    public compliance: Compliance,
+    public index: number,
+    public fieldGroup: FieldGroup[]
+  ) { }
+}

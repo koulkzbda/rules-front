@@ -27,6 +27,10 @@ export class Watchlist {
   getId(): string {
     return this.id ? this.id.toString() : '';
   }
+
+  updateSimpleWatchlistLabel(): void {
+    this.label = `${this.ruleSet[0].fieldType.label} ${this.ruleSet[0].condition} ${this.ruleSet[0].getInputAsString()}`;
+  }
 }
 
 export class LogicalContainer {
