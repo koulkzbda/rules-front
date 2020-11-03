@@ -1,3 +1,5 @@
+import { NumericalFieldType } from './../../../../watchlist/models/fieldType.model';
+import { Rule, Watchlist } from './../../../../watchlist/models/watchlist.model';
 import { Compliance, ComplianceRuleBuilder } from './../../../models/compliance.model';
 import { ComplianceService } from './../../../services/compliance.service';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -11,15 +13,20 @@ import { FieldType } from 'src/app/watchlist/models/fieldType.model';
 })
 export class CreateRuleDialogComponent implements OnInit {
   initialCompliance: Compliance;
+  whatchlistAdded = new Watchlist();
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: ComplianceRuleBuilder, protected complianceService: ComplianceService) { }
 
   updateCompliance(): void {
-    this.data.compliance.complianceRules[this.data.index].rule.label =
-      `${this.data.compliance.complianceRules[this.data.index].rule.ruleSet[0].fieldType.label} ${this.data.compliance.complianceRules[this.data.index].rule.ruleSet[0].condition} ${this.data.compliance.complianceRules[this.data.index].rule.ruleSet[0].getInputAsString()}`;
-    this.data.compliance.complianceRules[this.data.index].group.watchlists.push(
-      this.data.compliance.complianceRules[this.data.index].rule
-    );
+    this.whatchlistAdded.label =
+      `${this.whatchlistAdded.ruleSet[0].fieldType.label} ${this.whatchlistAdded.ruleSet[0].condition} ${this.whatchlistAdded.ruleSet[0].getInputAsString()}`;
+    this.data.groups.forEach(group => {
+      if (group.label === this.data.compliance.complianceRules[this.data.index].group) {
+        group.watchlists.push(this.whatchlistAdded);
+      }
+    });
+    this.data.compliance.complianceRules[this.data.index].rule = this.whatchlistAdded;
+    this.complianceService.transmitGroups(this.data.groups);
     this.complianceService.transmitCompliance(this.data.compliance);
   }
 
@@ -29,6 +36,7 @@ export class CreateRuleDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.initialCompliance = JSON.parse(JSON.stringify(this.data.compliance));
+    this.whatchlistAdded.ruleSet.push(new Rule(new NumericalFieldType('ESG BMK Diff'), '<', ['0']));
   }
 
   compareByFieldLabel(fieldType1: FieldType, fieldType2: FieldType): boolean {

@@ -1,15 +1,17 @@
 import { FieldGroup, NumericalFieldType } from '../../watchlist/models/fieldType.model';
 import { Watchlist } from './../../watchlist/models/watchlist.model';
 export class ComplianceRuleGroup {
-  constructor(
-    public label?: string,
-    public watchlists?: Watchlist[]
-  ) { }
+  public label?: string;
+  public watchlists?: Watchlist[];
+  constructor(label?: string, watchlists?: Watchlist[]) {
+    this.label = label;
+    this.watchlists = watchlists ? watchlists : [];
+  }
 }
 
 export class ComplianceRule {
   constructor(
-    public group?: ComplianceRuleGroup,
+    public group?: string,
     public rule?: Watchlist,
     public aggregation?: NumericalFieldType,
     public condition?: string,
@@ -46,6 +48,7 @@ export class ComplianceRuleBuilder {
   constructor(
     public compliance: Compliance,
     public index: number,
-    public fieldGroup: FieldGroup[]
+    public fieldGroup: FieldGroup[],
+    public groups: ComplianceRuleGroup[]
   ) { }
 }
