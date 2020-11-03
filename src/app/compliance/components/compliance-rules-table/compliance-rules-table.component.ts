@@ -19,6 +19,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 })
 export class ComplianceRulesTableComponent implements OnInit, OnDestroy {
   complianceSub: Subscription;
+  groupsSub: Subscription;
   compliance: Compliance;
   transmittedCompliance: Compliance;
   complianceNames: string[];
@@ -27,6 +28,7 @@ export class ComplianceRulesTableComponent implements OnInit, OnDestroy {
   groups: ComplianceRuleGroup[];
   fieldTypes = [];
   fieldGroup: FieldGroup[];
+  watchlistsByGroup: ComplianceRuleGroup[] = [];
 
   constructor(
     public dialog: MatDialog,
@@ -35,15 +37,17 @@ export class ComplianceRulesTableComponent implements OnInit, OnDestroy {
     protected route: ActivatedRoute) { }
 
   addNewComplianceRule(): void {
-    const complianceRuleAdded = new ComplianceRule(this.groups[0], this.groups[0].watchlists[0].mainContainer.rules[0], new NumericalFieldType('MV Weight'), '>', 'N/A', null, 5);
+    const complianceRuleAdded = new ComplianceRule(this.groups[0].label, this.groups[0].watchlists[0].mainContainer.rules[0], new NumericalFieldType('MV Weight'), '>', 'N/A', null, 5);
     this.dataSource.data
       .push(complianceRuleAdded);
     this.dataSource.filter = '';
+    this.updateSelectableWatchlists();
   }
 
   deleteRule(index: number): void {
     this.compliance.complianceRules.splice(index, 1);
     this.dataSource = new MatTableDataSource(this.compliance.complianceRules);
+    this.updateSelectableWatchlists();
   }
 
   addNewWatchlistRule(index: number): void {
@@ -74,7 +78,7 @@ export class ComplianceRulesTableComponent implements OnInit, OnDestroy {
 
   openAddWatchlistRuleDialog(i: number): void {
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.data = new ComplianceRuleBuilder(this.compliance, i, this.fieldGroup);
+    dialogConfig.data = new ComplianceRuleBuilder(this.compliance, i, this.fieldGroup, this.groups);
     dialogConfig.maxWidth = 1100;
     const dialogRef = this.dialog.open(CreateRuleDialogComponent, dialogConfig);
 
@@ -83,6 +87,7 @@ export class ComplianceRulesTableComponent implements OnInit, OnDestroy {
         this.complianceSub = this.complianceService.complianceObs.subscribe(
           value => this.compliance = value
         );
+        this.fetchGroups();
       }
     );
   }
@@ -99,12 +104,32 @@ export class ComplianceRulesTableComponent implements OnInit, OnDestroy {
     return fieldType1 && fieldType2 ? fieldType1.label === fieldType2.label : fieldType1 === fieldType2;
   }
 
+  updateSelectableWatchlists(): void {
+    this.watchlistsByGroup = [];
+    this.compliance.complianceRules.forEach(complianceRule => {
+      this.watchlistsByGroup.push(this.selectGroupByLabel(complianceRule.group));
+    });
+  }
+
+  selectGroupByLabel(groupLabel: string): ComplianceRuleGroup {
+    const groupSelected = this.groups.filter(group => group.label === groupLabel)[0];
+    return groupSelected ? groupSelected : this.groups[0];
+  }
+
   drop(event: CdkDragDrop<ComplianceRule[]>): void {
     moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
   }
 
   updateCompliance(): void {
     this.complianceService.transmitCompliance(this.compliance);
+  }
+
+  fetchGroups(): void {
+    this.groupsSub = this.complianceService.groupsObs.subscribe(
+      value => {
+        if (value.length > 0) { this.groups = value; }
+      }
+    );
   }
 
   ngOnInit(): void {
@@ -122,10 +147,12 @@ export class ComplianceRulesTableComponent implements OnInit, OnDestroy {
       } else {
         this.compliance = this.transmittedCompliance.id ? new Compliance() : this.transmittedCompliance;
       }
+      this.groups = this.complianceService.getComplianceGroup('1');
+      this.fetchGroups();
+      this.updateSelectableWatchlists();
     });
     this.complianceNames = this.complianceService.getComplianceNames('1');
     this.dataSource = new MatTableDataSource(this.compliance.complianceRules);
-    this.groups = this.complianceService.getComplianceGroup('1');
     this.fieldGroup = FIELD_GROUP;
     this.fieldGroup.forEach(fieldGroup => {
       fieldGroup.fields.forEach(fieldType => {
@@ -138,6 +165,7 @@ export class ComplianceRulesTableComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.complianceSub.unsubscribe();
+    this.groupsSub.unsubscribe();
   }
 
 }

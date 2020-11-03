@@ -31,8 +31,8 @@
           </th>
           <td mat-cell *matCellDef="let rule; let i = index" class="text-center border">
             <mat-form-field appearance="legacy" class="mat-form-field-padding-top max-width-l">
-              <mat-select [(value)]="compliance.complianceRules[i].group" [compareWith]="compareByGroupLabel">
-                <mat-option *ngFor="let group of groups" [value]="group">
+              <mat-select [(value)]="compliance.complianceRules[i].group" (change)="updateSelectableWatchlists()">
+                <mat-option *ngFor="let group of groups" [value]="group.label">
                   {{group.label}}
                 </mat-option>
               </mat-select>
@@ -47,8 +47,7 @@
           <td mat-cell *matCellDef="let rule; let i = index" class="text-center border">
             <mat-form-field appearance="legacy" class="mat-form-field-padding-top">
               <mat-select [(value)]="compliance.complianceRules[i].rule" [compareWith]="compareByWatchlistLabel">
-                <mat-option *ngFor="let watchlist of compliance.complianceRules[i].group.watchlists"
-                  [value]="watchlist">
+                <mat-option *ngFor="let watchlist of watchlistsByGroup[i]?.watchlists" [value]="watchlist">
                   {{watchlist.label}}
                 </mat-option>
                 <mat-option (click)="addNewWatchlistRule(i)" [value]="compliance.complianceRules[i].rule">

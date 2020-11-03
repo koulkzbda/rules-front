@@ -11,15 +11,24 @@ import { Injectable } from '@angular/core';
 export class ComplianceService {
 
   protected compliance = new BehaviorSubject<Compliance>(new Compliance());
+  protected groups = new BehaviorSubject<ComplianceRuleGroup[]>([]);
 
   get complianceObs(): Observable<Compliance> {
     return this.compliance.asObservable();
+  }
+
+  get groupsObs(): Observable<ComplianceRuleGroup[]> {
+    return this.groups.asObservable();
   }
 
   constructor(private http: HttpClient) { }
 
   transmitCompliance(complianceTransmitted: Compliance): void {
     this.compliance.next(complianceTransmitted);
+  }
+
+  transmitGroups(groupsTransmitted: ComplianceRuleGroup[]): void {
+    this.groups.next(groupsTransmitted);
   }
 
   getCompliance(complianceId: string): Compliance {
