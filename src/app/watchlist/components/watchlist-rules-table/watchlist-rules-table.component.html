@@ -47,7 +47,7 @@
           </th>
           <td mat-cell *matCellDef="let rule; let i = index" class="text-center border">
             <mat-form-field appearance="outline" class="mat-form-field-padding-top"
-              *ngIf="watchlist.ruleSet[i].fieldType.constructor.name === 'EnumerartionalFieldType'">
+              *ngIf="watchlist.ruleSet[i].fieldType?.conditions[0] === 'IN'">
               <mat-select [(value)]="watchlist.ruleSet[i].input" multiple>
                 <mat-option *ngFor="let input of watchlist.ruleSet[i].fieldType.inputs" [value]="input">
                   {{input}}
@@ -55,7 +55,7 @@
               </mat-select>
             </mat-form-field>
             <mat-form-field appearance="outline" class="mat-form-field-padding-top"
-              *ngIf="watchlist.ruleSet[i].fieldType.constructor.name === 'NumericalFieldType'">
+              *ngIf="watchlist.ruleSet[i].fieldType?.conditions[0] === 'TOP'">
               <input matInput [(ngModel)]="watchlist.ruleSet[i].input[0]" name="input-{{i}}">
             </mat-form-field>
           </td>
