@@ -10,7 +10,7 @@
     </div>
     <div class="row">
       <div class="col-12">
-        <h2 class="mat-text-primary text-center">Drag rules to combine them into a watchlist</h2>
+        <h2 class="mat-text-primary text-center">Drag filters to combine them into a watchlist</h2>
       </div>
       <div class="col-12 col-md-6">
         <div class="d-flex flex-column justify-content-center h-100 border rounded bg-white">
@@ -30,7 +30,8 @@
     </div>
     <div class="row my-3">
       <div class="col d-flex justify-content-around">
-        <a routerLink="/watchlist/{{watchlist.getId()}}" mat-raised-button color="accent" class="a-in-mat-button">EDTT
+        <a [routerLink]="['/watchlist/', {id: watchlist.getId()}]" mat-raised-button color="accent"
+          class="a-in-mat-button">EDTT
           RULES</a>
         <button (click)="saveOrOpenDialog()" mat-raised-button color="primary">SAVE</button>
       </div>
@@ -58,7 +59,7 @@
         [cdkDropListConnectedTo]="getListContainerConnected(container)" [multiple]="false"
         class="bg-light m-2 border rounded">
         <p *ngIf="container?.rules.length <= 0" class="ml-3 text-muted">
-          Drop rules here...
+          Drop filters and criteria here...
         </p>
         <mat-list-option *ngFor="let rule of container?.rules" cdkDrag>
           {{rule.fieldType.label}} {{rule.condition}} {{rule.getInputAsString()}}
@@ -66,9 +67,6 @@
       </mat-selection-list>
       <ng-container *ngIf="container?.containers?.length > 0">
         <div *ngFor="let containerChild of container?.containers">
-          <div class="border rounded mx-auto logical-connector p-2 mb-3 text-center">
-            {{container.type}}
-          </div>
           <ng-container
             *ngTemplateOutlet="recursiveContainerTmpl; context: { container: containerChild, parent: container}">
           </ng-container>

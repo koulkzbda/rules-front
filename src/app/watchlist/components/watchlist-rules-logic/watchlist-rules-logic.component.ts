@@ -63,6 +63,7 @@ export class WatchlistRulesLogicComponent implements OnInit, OnDestroy {
       this.complianceService.transmitGroups(complianceRuleGroup);
       this.complianceSelected.complianceRules[parseInt(this.complianceIndexSelected, 10)].rule = this.watchlist;
       this.complianceService.transmitCompliance(this.complianceSelected);
+      this.watchlistService.transmitWatchlist(new Watchlist());
       if (this.complianceSelected.id) {
         this.router.navigate(['/compliance', this.complianceSelected.id]);
       } else {

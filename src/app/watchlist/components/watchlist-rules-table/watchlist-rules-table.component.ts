@@ -53,7 +53,7 @@ export class WatchlistRulesTableComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
-      const watchlistId = params.get('watchlistId');
+      const watchlistId = params.get('id');
       const complianceIndex = params.get('index');
       console.log(params);
       this.watchlistSub = this.watchlistService.watchlistObs.subscribe(

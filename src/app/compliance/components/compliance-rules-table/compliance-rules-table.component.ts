@@ -1,5 +1,4 @@
 import { OPERATOR_AGGREGATION } from './../../mocks/compliance.mock';
-import { CreateRuleDialogComponent } from './create-rule-dialog/create-rule-dialog.component';
 import { Subscription } from 'rxjs';
 import { ComplianceService } from './../../services/compliance.service';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -54,7 +53,6 @@ export class ComplianceRulesTableComponent implements OnInit, OnDestroy {
 
   addNewWatchlistRule(i: number): void {
     this.updateCompliance();
-    // this.openAddWatchlistRuleDialog(i);
     this.router.navigate(['/watchlist', { index: i }]);
   }
 
@@ -77,22 +75,6 @@ export class ComplianceRulesTableComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(SaveComplianceDialogComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(result => { });
-  }
-
-  openAddWatchlistRuleDialog(i: number): void {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.data = new ComplianceRuleBuilder(this.compliance, i, this.fieldGroup, this.groups);
-    dialogConfig.maxWidth = 1100;
-    const dialogRef = this.dialog.open(CreateRuleDialogComponent, dialogConfig);
-
-    dialogRef.afterClosed().subscribe(
-      result => {
-        this.complianceSub = this.complianceService.complianceObs.subscribe(
-          value => this.compliance = value
-        );
-        this.fetchGroups();
-      }
-    );
   }
 
   compareByGroupLabel(group1: ComplianceRuleGroup, group2: ComplianceRuleGroup): boolean {
