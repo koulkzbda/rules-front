@@ -1,3 +1,5 @@
+import { ComplianceService } from './../../../compliance/services/compliance.service';
+import { Compliance } from './../../../compliance/models/compliance.model';
 import { WatchlistService } from './../../services/watchlist.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SaveWatchlistDiaologueComponent } from './save-watchlist-diaologue/save-watchlist-diaologue.component';
@@ -18,8 +20,15 @@ export class WatchlistRulesLogicComponent implements OnInit, OnDestroy {
   initialRuleSet: Rule[];
   watchlistNames: string[];
   listContainerRules = [];
+  complianceIndexSelected: string;
+  complianceSelected: Compliance;
+
   constructor(
-    public dialog: MatDialog, protected watchlistService: WatchlistService, protected router: Router, protected route: ActivatedRoute) {
+    public dialog: MatDialog,
+    protected watchlistService: WatchlistService,
+    protected router: Router,
+    protected route: ActivatedRoute,
+    protected complianceService: ComplianceService) {
   }
 
   getListContainerConnected(container: LogicalContainer): string[] {
@@ -43,7 +52,25 @@ export class WatchlistRulesLogicComponent implements OnInit, OnDestroy {
   }
 
   saveWatchlist(): void {
-    this.router.navigate(['/dashboard']);
+    if (this.complianceIndexSelected) {
+      console.log(this.complianceSelected);
+      const complianceRuleGroup = this.complianceService.getComplianceGroup('1');
+      complianceRuleGroup.forEach(group => {
+        if (group.label === this.complianceSelected.complianceRules[this.complianceIndexSelected].group) {
+          group.watchlists.push(this.watchlist);
+        }
+      });
+      this.complianceService.transmitGroups(complianceRuleGroup);
+      this.complianceSelected.complianceRules[parseInt(this.complianceIndexSelected, 10)].rule = this.watchlist;
+      this.complianceService.transmitCompliance(this.complianceSelected);
+      if (this.complianceSelected.id) {
+        this.router.navigate(['/compliance', this.complianceSelected.id]);
+      } else {
+        this.router.navigate(['/compliance']);
+      }
+    } else {
+      this.router.navigate(['/dashboard']);
+    }
   }
 
   saveOrOpenDialog(): void {
@@ -100,6 +127,16 @@ export class WatchlistRulesLogicComponent implements OnInit, OnDestroy {
     //this will have to be retreived from the backend API
     this.watchlistNames = this.watchlistService.getWatchlistNames('1');
     this.retrieveWatchlist();
+    this.route.paramMap.subscribe(params => {
+      const complianceIndex = params.get('index');
+      if (complianceIndex) {
+        this.complianceIndexSelected = complianceIndex;
+        this.complianceService.complianceObs.subscribe(
+          value => {
+            this.complianceSelected = value;
+          });
+      }
+    });
   }
 
   ngOnDestroy(): void {

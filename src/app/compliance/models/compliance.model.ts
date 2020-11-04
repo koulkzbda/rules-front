@@ -14,6 +14,7 @@ export class ComplianceRule {
     public group?: string,
     public rule?: Watchlist,
     public aggregation?: NumericalFieldType,
+    public operator?: string,
     public condition?: string,
     public regulationThreshold?: string,
     public warning?: number,

@@ -1,3 +1,4 @@
+import { OPERATOR_AGGREGATION } from './../../mocks/compliance.mock';
 import { CreateRuleDialogComponent } from './create-rule-dialog/create-rule-dialog.component';
 import { Subscription } from 'rxjs';
 import { ComplianceService } from './../../services/compliance.service';
@@ -24,8 +25,9 @@ export class ComplianceRulesTableComponent implements OnInit, OnDestroy {
   transmittedCompliance: Compliance;
   complianceNames: string[];
   dataSource: MatTableDataSource<ComplianceRule>;
-  displayedColumns = ['drag', 'group', 'complianceRule', 'aggregation', 'condition', 'warning', 'breach', 'regulationThreshold', 'actions'];
+  displayedColumns = ['drag', 'group', 'complianceRule', 'aggregation', 'operator', 'condition', 'warning', 'breach', 'regulationThreshold', 'actions'];
   groups: ComplianceRuleGroup[];
+  operators: string[];
   fieldTypes = [];
   fieldGroup: FieldGroup[];
   watchlistsByGroup: ComplianceRuleGroup[] = [];
@@ -50,9 +52,10 @@ export class ComplianceRulesTableComponent implements OnInit, OnDestroy {
     this.updateSelectableWatchlists();
   }
 
-  addNewWatchlistRule(index: number): void {
+  addNewWatchlistRule(i: number): void {
     this.updateCompliance();
-    this.openAddWatchlistRuleDialog(index);
+    // this.openAddWatchlistRuleDialog(i);
+    this.router.navigate(['/watchlist', { index: i }]);
   }
 
   saveCompliance(): void {
@@ -146,6 +149,7 @@ export class ComplianceRulesTableComponent implements OnInit, OnDestroy {
         }
       } else {
         this.compliance = this.transmittedCompliance.id ? new Compliance() : this.transmittedCompliance;
+        console.log(this.compliance);
       }
       this.groups = this.complianceService.getComplianceGroup('1');
       this.fetchGroups();
@@ -154,6 +158,7 @@ export class ComplianceRulesTableComponent implements OnInit, OnDestroy {
     this.complianceNames = this.complianceService.getComplianceNames('1');
     this.dataSource = new MatTableDataSource(this.compliance.complianceRules);
     this.fieldGroup = FIELD_GROUP;
+    this.operators = OPERATOR_AGGREGATION;
     this.fieldGroup.forEach(fieldGroup => {
       fieldGroup.fields.forEach(fieldType => {
         if (fieldType instanceof NumericalFieldType) {

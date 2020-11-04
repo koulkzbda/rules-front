@@ -20,6 +20,7 @@ export class WatchlistRulesTableComponent implements OnInit, OnDestroy {
   displayedColumns = ['field', 'condition', 'input', 'actions'];
   dataSource: MatTableDataSource<Rule>;
   fieldGroup = FIELD_GROUP;
+  complianceIndexSelected: string;
 
   constructor(protected watchlistService: WatchlistService, protected router: Router, protected route: ActivatedRoute) { }
 
@@ -43,12 +44,18 @@ export class WatchlistRulesTableComponent implements OnInit, OnDestroy {
 
   goToLogic(): void {
     this.updateWatchlist();
-    this.router.navigate(['/save/watchlist']);
+    if (this.complianceIndexSelected) {
+      this.router.navigate(['/save/watchlist', { index: this.complianceIndexSelected }]);
+    } else {
+      this.router.navigate(['/save/watchlist']);
+    }
   }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       const watchlistId = params.get('watchlistId');
+      const complianceIndex = params.get('index');
+      console.log(params);
       this.watchlistSub = this.watchlistService.watchlistObs.subscribe(
         value => this.transmittedWatchlist = value
       );
@@ -60,6 +67,10 @@ export class WatchlistRulesTableComponent implements OnInit, OnDestroy {
         }
       } else {
         this.watchlist = this.transmittedWatchlist.id ? new Watchlist() : this.transmittedWatchlist;
+      }
+      if (complianceIndex) {
+        console.log(complianceIndex);
+        this.complianceIndexSelected = complianceIndex;
       }
     });
     this.dataSource = new MatTableDataSource(this.watchlist.ruleSet);

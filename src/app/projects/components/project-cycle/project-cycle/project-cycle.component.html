@@ -3,7 +3,8 @@
     <h2 class="mat-text-primary">Fund dashboard</h2>
   </div>
   <div class="col-6 d-flex justify-content-around my-3">
-    <a routerLink="/watchlist/1" mat-raised-button color="primary" class="a-in-mat-button">CONFIGURE WATCHLIST</a>
+    <a [routerLink]="['/watchlist/', {id: 1}]" mat-raised-button color="primary" class="a-in-mat-button">CONFIGURE
+      WATCHLIST</a>
   </div>
   <div class="col-6 d-flex justify-content-around my-3">
     <a routerLink="/compliance/1" mat-raised-button color="primary" class="a-in-mat-button">CONFIGURE COMPLIANCE</a>

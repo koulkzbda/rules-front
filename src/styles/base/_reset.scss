@@ -6,7 +6,12 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 }
 
 .mat-form-field-padding-top {
-  padding-top: 1.34375em !important;
+  padding-top: 1.25em !important;
+}
+
+.mat-cell-no-padding {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
 }
 
 @include font-size;
